@@ -1,0 +1,21 @@
+{
+  "name": "discordbot",
+  "version": "1.0.0",
+  "description": "bot for discord",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "config": "^1.29.4",
+    "discord.js": "^11.3.0",
+    "list-filepaths": "^1.6.5",
+    "lodash": "^4.17.5",
+    "lowdb": "^1.0.0",
+    "pandemonium": "^1.4.1",
+    "uuid": "^3.2.1"
+  }
+}
