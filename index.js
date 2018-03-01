@@ -339,6 +339,11 @@ client.on("message", message => {
             id: Number(id)
           }).value()
 
+          if (idData === undefined ) {
+            message.channel.send('Не нашла такой картинки с таким номером' )
+            return
+          }
+
           let arr =  idData.tags
 
           arr = _.concat(arr, addTags)
