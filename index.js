@@ -40,7 +40,7 @@ client.on("ready", () => {
     })
     .write()
   let listUsers = []
-  let newlistUsers = []
+  let newListUsers = []
   let firstLaunch = true
   setInterval(function () {
     axios
@@ -53,17 +53,24 @@ client.on("ready", () => {
       .then(res => {
         let data = []
         res.data.forEach(x => data.push(x.name))
-        newlistUsers = data
+        newListUsers = data
+
+        let reverseDiff = []
+        listUsers.forEach(x => {
+          if (!newListUsers.includes(x)) {
+            reverseDiff.push(x)
+          }
+        })
 
         let diff = []
-        newlistUsers.forEach(x => {
+        newListUsers.forEach(x => {
           if (!listUsers.includes(x)) {
             diff.push(x)
           }
         })
 
         if (firstLaunch) {
-          listUsers = newlistUsers
+          listUsers = newListUsers
           firstLaunch = false
           return
         }
@@ -73,9 +80,15 @@ client.on("ready", () => {
             .find("name", servername)
             .channels.find("name", "general")
           if (!channel) return
-          listUsers = newlistUsers
+          listUsers = newListUsers
           channel.send("В Дравпайл зашел: " + diff.join(", "))
         }
+
+        if (reverseDiff.length > 0){
+          console.log("reverseDiff on")
+          listUsers = newListUsers
+        }
+
       })
       .catch(e => console.log(e))
 
