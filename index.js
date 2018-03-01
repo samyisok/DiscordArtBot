@@ -184,7 +184,7 @@ client.on("message", message => {
     message.channel.send(pandemonium.choice(msg))
   }
 
-  if (/^uuu/i.test(message.content) || /^ууу/i.test(message.content)) {
+  if (/^uuu+$/i.test(message.content) ) {
     message.react("🍆")
   }
 
