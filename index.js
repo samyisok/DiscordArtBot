@@ -42,7 +42,7 @@ client.on("ready", () => {
   let listUsers = []
   let newListUsers = []
   let firstLaunch = true
-  setInterval(function () {
+  setInterval(function() {
     axios
       .get(drawpileUrl, {
         auth: {
@@ -84,11 +84,10 @@ client.on("ready", () => {
           channel.send("В Дравпайл зашел: " + diff.join(", "))
         }
 
-        if (reverseDiff.length > 0){
+        if (reverseDiff.length > 0) {
           console.log("reverseDiff on")
           listUsers = newListUsers
         }
-
       })
       .catch(e => console.log(e))
 
@@ -161,7 +160,6 @@ client.on("message", message => {
   ) {
     listFilepaths("./halp")
       .then(filepaths => {
-        console.log(filepaths)
         let path = pandemonium.choice(filepaths)
         message.channel.send("send help", {
           files: [path]
@@ -184,8 +182,25 @@ client.on("message", message => {
     message.channel.send(pandemonium.choice(msg))
   }
 
-  if (/^uuu+$/i.test(message.content) ) {
+  if (/^uuu+$/i.test(message.content)) {
     message.react("🍆")
+  }
+
+  if (
+    (/я\s+мудак/i.test(message.content) || /говно/i.test(message.content)) &&
+    message.author.userId === "177116602884554754"
+  ) {
+    listFilepaths("./halp")
+      .then(filepaths => {
+        let path = pandemonium.choice(filepaths)
+        message.channel.send("send help", {
+          files: [path]
+        })
+      })
+      .catch(err => {
+        // Handle errors
+        console.error(err)
+      })
   }
 
   if (
@@ -199,18 +214,18 @@ client.on("message", message => {
     msg = msg.split(splitter).slice(1)
     if (_.toLower(msg[0]) === "add") {
       msg = msg.slice(1)
-      msg = msg.map( x=> _.toLower(x) )
+      msg = msg.map(x => _.toLower(x))
       let urlFile = msg.shift()
       let user = message.author.username
       let userId = message.author.id
       let uuidFile = uuid()
 
       axios({
-          method: "get",
-          url: urlFile,
-          responseType: "stream"
-        })
-        .then(function (response) {
+        method: "get",
+        url: urlFile,
+        responseType: "stream"
+      })
+        .then(function(response) {
           let type = response.headers["content-type"]
           console.log(type)
           let fileDesc = ""
@@ -235,8 +250,8 @@ client.on("message", message => {
           ) {
             message.channel.send(
               "Размер файла слишком большой: " +
-              Math.round(sizeFile / 1000000) +
-              " MB"
+                Math.round(sizeFile / 1000000) +
+                " MB"
             )
             return
           }
@@ -297,12 +312,11 @@ client.on("message", message => {
           console.log(response)
           message.react("💩")
         })
-
     } else if (_.toLower(msg[0]) === "last") {
       message.channel.send("Последний id: " + db.get("refsCount").value())
     } else if (_.toLower(msg[0]) === "id") {
       //start id part
-      msg = msg.map( x=> _.toLower(x) )
+      msg = msg.map(x => _.toLower(x))
       let typeOp = msg.shift()
       let id = msg.shift()
 
@@ -318,17 +332,17 @@ client.on("message", message => {
       while (msg.length > 0) {
         let tag = msg.shift()
         if (/^\-.+/.test(tag)) {
-          delTags.push(_.trimStart(tag, '-'))
+          delTags.push(_.trimStart(tag, "-"))
         } else if (/^\+.+/.test(tag)) {
-          addTags.push(_.trimStart(tag, '+'))
+          addTags.push(_.trimStart(tag, "+"))
         } else {
           otherTags.push(tag)
         }
       }
-      console.log('tags: ',addTags, delTags, otherTags)
+      console.log("tags: ", addTags, delTags, otherTags)
 
       if (addTags.length === 0 && delTags.length === 0) {
-        console.log("id",id)
+        console.log("id", id)
         let idData = db
           .get("refs")
           .find({
@@ -336,12 +350,19 @@ client.on("message", message => {
           })
           .value()
         if (idData !== undefined && idData.length !== 0) {
-          message.channel.send("send refs №" + idData.id + '\n'
-          + '[' + idData.tags.join(', ') + ']', {
-            files: [refsPath + idData.name]
-          }) 
-        } else { 
-          console.log("idData",idData)
+          message.channel.send(
+            "send refs №" +
+              idData.id +
+              "\n" +
+              "[" +
+              idData.tags.join(", ") +
+              "]",
+            {
+              files: [refsPath + idData.name]
+            }
+          )
+        } else {
+          console.log("idData", idData)
           message.react("⭕")
         }
       } else {
@@ -350,28 +371,31 @@ client.on("message", message => {
           .get("refs")
           .find({
             id: Number(id)
-          }).value()
+          })
+          .value()
 
-          if (idData === undefined ) {
-            message.channel.send('Не нашла такой картинки с таким номером' )
-            return
-          }
+        if (idData === undefined) {
+          message.channel.send("Не нашла такой картинки с таким номером")
+          return
+        }
 
-          let arr =  idData.tags
+        let arr = idData.tags
 
-          arr = _.concat(arr, addTags)
-          arr = _.pullAll(arr, delTags)
+        arr = _.concat(arr, addTags)
+        arr = _.pullAll(arr, delTags)
 
-          let newIdData = db.get('refs')
+        let newIdData = db
+          .get("refs")
           .find({
             id: Number(id)
           })
-          .assign({tags: _.uniq(arr)})
+          .assign({ tags: _.uniq(arr) })
           .write()
 
-          console.log('changes: ', newIdData.tags)
-          message.channel.send("№" + newIdData.id + ", newTags:\n[" + newIdData.tags.join(', ') + ']' )
-
+        console.log("changes: ", newIdData.tags)
+        message.channel.send(
+          "№" + newIdData.id + ", newTags:\n[" + newIdData.tags.join(", ") + "]"
+        )
       }
       //end id part
     } else if (msg.length === 0) {
@@ -386,18 +410,20 @@ client.on("message", message => {
         })
       }
     } else {
-      msg = msg.map( x=> _.toLower(x) )
+      msg = msg.map(x => _.toLower(x))
       let tags = _.uniq(msg)
 
-
-      let fd = db.get("refs")
-        .filter((x) => {
+      let fd = db
+        .get("refs")
+        .filter(x => {
           let correct = []
-          tags.forEach((y) => {
+          tags.forEach(y => {
             correct.push(_.includes(x.tags, y))
           })
           return correct.every(x => x === true)
-        }).sample().value()
+        })
+        .sample()
+        .value()
 
       if (fd !== undefined && fd.length !== 0) {
         message.channel.send("send refs №" + fd.id, {
@@ -410,12 +436,15 @@ client.on("message", message => {
           .value()
 
         if (fileData !== undefined && fileData.length !== 0) {
-          message.channel.send("Я ничего не нашла, вот вам рендомная картинка номер №" + fileData.id, {
-            files: [refsPath + fileData.name]
-          })
+          message.channel.send(
+            "Я ничего не нашла, вот вам рендомная картинка номер №" +
+              fileData.id,
+            {
+              files: [refsPath + fileData.name]
+            }
+          )
         }
       }
-
     }
   }
 
