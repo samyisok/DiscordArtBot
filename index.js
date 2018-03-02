@@ -25,6 +25,8 @@ const drawpilePass = drawpile.password
 const drawpileUser = drawpile.user
 const refsPath = "refs/"
 
+let helpWathcher = []
+
 client.on("ready", () => {
   console.log("I am ready!")
   console.log(servername)
@@ -91,6 +93,7 @@ client.on("ready", () => {
       })
       .catch(e => console.log(e))
 
+    helpWathcher = []
     console.log(listUsers)
   }, 60000)
 
@@ -124,9 +127,7 @@ client.on("message", message => {
         } else {
           msg = "Пользователи в Drawpile: " + data.join(", ")
         }
-        msg += "\n"
-        msg += "https://drawpile.net/download/ \n"
-        msg += "Зайти на: 2draw.me:9002"
+        msg += "\nДоп.Инфа: http://2draw.me/drawpile/"
         message.channel.send(msg)
       })
   }
@@ -158,12 +159,18 @@ client.on("message", message => {
     /^%памагите/i.test(message.content) ||
     /^%херп/i.test(message.content)
   ) {
+    let userId = message.author.userId
+    if ( _.includes(helpWathcher, userId) ) {
+        message.channel.send("Я недавно уже помогала, пользуйся прошлой картинкой")
+        return
+    }
     listFilepaths("./halp")
       .then(filepaths => {
         let path = pandemonium.choice(filepaths)
         message.channel.send("send help", {
           files: [path]
         })
+        helpWathcher.push(userId)
       })
       .catch(err => {
         // Handle errors
@@ -214,8 +221,10 @@ client.on("message", message => {
     msg = msg.split(splitter).slice(1)
     if (_.toLower(msg[0]) === "add") {
       msg = msg.slice(1)
-      msg = msg.map(x => _.toLower(x))
       let urlFile = msg.shift()
+      urlFile = _.trimStart( urlFile, '<' )
+      urlFile = _.trimEnd( urlFile, '>' )
+      msg = msg.map(x => _.toLower(x))
       let user = message.author.username
       let userId = message.author.id
       let uuidFile = uuid()
@@ -227,7 +236,6 @@ client.on("message", message => {
       })
         .then(function(response) {
           let type = response.headers["content-type"]
-          console.log(type)
           let fileDesc = ""
           if (type === "image/jpeg") {
             fileDesc = "jpg"
@@ -309,7 +317,6 @@ client.on("message", message => {
         })
         .catch(err => {
           console.log("err: " + err + urlFile)
-          console.log(response)
           message.react("💩")
         })
     } else if (_.toLower(msg[0]) === "last") {
