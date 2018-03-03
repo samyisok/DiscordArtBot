@@ -83,7 +83,7 @@ client.on("ready", () => {
             .channels.find("name", "general")
           if (!channel) return
           listUsers = newListUsers
-          channel.send("В Дравпайл зашел: " + diff.join(", "))
+          channel.send("<http://2draw.me/drawpile/> - Зашел: " + diff.join(", "))
         }
 
         if (reverseDiff.length > 0) {
@@ -121,13 +121,12 @@ client.on("message", message => {
       .then(res => {
         let data = []
         res.data.forEach(x => data.push(x.name))
-        let msg = ""
+        let msg = "<http://2draw.me/drawpile/> - "
         if (data.length === 0) {
-          msg = "В дравпайле никого нет 😭"
+          msg += "Но в дравпайле никого нет 😭"
         } else {
-          msg = "Пользователи в Drawpile: " + data.join(", ")
+          msg += "Пользователи в Drawpile: " + data.join(", ")
         }
-        msg += "\nДоп.Инфа: http://2draw.me/drawpile/"
         message.channel.send(msg)
       })
   }
@@ -192,10 +191,9 @@ client.on("message", message => {
   if (/^uuu+$/i.test(message.content)) {
     message.react("🍆")
   }
-
+/*
   if (
-    (/я\s+мудак/i.test(message.content) || /говно/i.test(message.content)) &&
-    message.author.userId === "177116602884554754"
+    /я\s+мудак/i.test(message.content) && message.author.userId === "177116602884554754"
   ) {
     listFilepaths("./halp")
       .then(filepaths => {
@@ -209,7 +207,7 @@ client.on("message", message => {
         console.error(err)
       })
   }
-
+*/
   if (
     /^%ref.?/i.test(message.content) ||
     /^%refs.?/i.test(message.content) ||
