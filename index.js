@@ -151,11 +151,15 @@ client.on("message", message => {
     msg += "%refs id [id] \n"
     msg += "%refs id [id] +[tag] -[tag]\n"
     msg += "%это [Легально, Вертолет, Эльф]?\n"
+    msg += "%! [вопрос]?\n"
     msg += "```"
     message.channel.send(msg)
   }
 
-  if(/^%это/i.test(message.content)) {
+  if(
+    /^%эт[оаи]/i.test(message.content) || 
+    /^%!/i.test(message.content) 
+  ) {
       let answers = ['Да', 'Нет', 'Точно да', 'Определенно нет', 'Спросите у Хидоя!'] 
       message.channel.send(pandemonium.choice(answers))
   }
