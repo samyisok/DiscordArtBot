@@ -83,7 +83,9 @@ client.on("ready", () => {
             .channels.find("name", "general")
           if (!channel) return
           listUsers = newListUsers
-          channel.send("<http://2draw.me/drawpile/> - Зашел: " + diff.join(", "))
+          channel.send(
+            "<http://2draw.me/drawpile/> - Зашел: " + diff.join(", ")
+          )
         }
 
         if (reverseDiff.length > 0) {
@@ -93,8 +95,8 @@ client.on("ready", () => {
       })
       .catch(e => console.log(e))
 
+    console.log(helpWathcher)
     helpWathcher = []
-    console.log(listUsers)
   }, 60000)
 
   //if ( guild.available ) { console.log('guilds availible')};
@@ -152,16 +154,25 @@ client.on("message", message => {
     message.channel.send(msg)
   }
 
+  if(/^%это/i.test(message.content)) {
+      let answers = ['Да', 'Нет', 'Спросите у Хидоя!'] 
+      message.channel.send(pandemonium.choice(answers))
+  }
+
+
   if (
     /^%halp/i.test(message.content) ||
     /^%рфдз/i.test(message.content) ||
     /^%памагите/i.test(message.content) ||
     /^%херп/i.test(message.content)
   ) {
-    let userId = message.author.userId
-    if ( _.includes(helpWathcher, userId) ) {
-        message.channel.send("Я недавно уже помогала, пользуйся прошлой картинкой")
-        return
+    let userId = message.author.id
+    console.log(helpWathcher)
+    if (_.includes(helpWathcher, userId)) {
+      message.channel.send(
+        "Я недавно уже помогала, пользуйся прошлой картинкой"
+      )
+      return
     }
     listFilepaths("./halp")
       .then(filepaths => {
@@ -191,23 +202,7 @@ client.on("message", message => {
   if (/^uuu+$/i.test(message.content)) {
     message.react("🍆")
   }
-/*
-  if (
-    /я\s+мудак/i.test(message.content) && message.author.userId === "177116602884554754"
-  ) {
-    listFilepaths("./halp")
-      .then(filepaths => {
-        let path = pandemonium.choice(filepaths)
-        message.channel.send("send help", {
-          files: [path]
-        })
-      })
-      .catch(err => {
-        // Handle errors
-        console.error(err)
-      })
-  }
-*/
+
   if (
     /^%ref.?/i.test(message.content) ||
     /^%refs.?/i.test(message.content) ||
@@ -220,8 +215,8 @@ client.on("message", message => {
     if (_.toLower(msg[0]) === "add") {
       msg = msg.slice(1)
       let urlFile = msg.shift()
-      urlFile = _.trimStart( urlFile, '<' )
-      urlFile = _.trimEnd( urlFile, '>' )
+      urlFile = _.trimStart(urlFile, "<")
+      urlFile = _.trimEnd(urlFile, ">")
       msg = msg.map(x => _.toLower(x))
       let user = message.author.username
       let userId = message.author.id
@@ -561,4 +556,9 @@ client.on("guildMemberAdd", member => {
   )
 })
 
-client.login(codeBot)
+try {
+  client.login(codeBot)
+} catch (error) {
+  console.log(error)  
+}
+
