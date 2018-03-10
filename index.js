@@ -105,8 +105,20 @@ client.on("ready", () => {
 client.on("message", message => {
   if (message.author.bot) return
   message.content = message.content.substr(0, 300)
-  if (message.content === "ping") {
-    message.reply("pong")
+  if (message.content === "%") {
+    let msgList = [
+      "А могли бы рисовать!",
+      "Не пережирай",
+      "Буль",
+      "Бака!",
+      "Анус себе дерни, бака!",
+      "Играешь небось!",
+      "Чего не рисуешь?",
+      "Опять не рисуете?",
+      "Скоро так разучитесь совсем рисовать",
+      "( .\\_.)\n(.\\_. )"
+    ]
+    message.channel.send(pandemonium.choice(msgList))
   }
 
   if (
