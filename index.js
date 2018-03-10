@@ -164,6 +164,8 @@ client.on("message", message => {
       message.channel.send(pandemonium.choice(answers))
   }
 
+  if( /^%точно/i.test(message.content) ) message.channel.send(pandemonium.choice( [ "Определенно точно", "Конечно точно", "Да!"] ))
+
 
   if (
     /^%halp/i.test(message.content) ||
