@@ -245,6 +245,9 @@ client.on("message", message => {
           } else if (type === "image/gif") {
             fileDesc = "gif"
             msg.push(fileDesc)
+          } else if (type === "image/webp") {
+            fileDesc = "webp"
+            msg.push(fileDesc)
           } else {
             console.log("wrong file: " + urlFile)
             message.react("❌")
