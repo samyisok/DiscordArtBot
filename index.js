@@ -111,7 +111,7 @@ client.on("message", message => {
 
   if (
     /^%drawpile/i.test(message.content) ||
-    /^вкфцзшду/i.test(message.content)
+    /^%вкфцзшду/i.test(message.content)
   ) {
     axios
       .get(drawpileUrl, {
@@ -127,6 +127,7 @@ client.on("message", message => {
         if (data.length === 0) {
           msg += "Но в дравпайле никого нет 😭"
         } else {
+          data = _.uniq(data)
           msg += "Пользователи в Drawpile: " + data.join(", ")
         }
         message.channel.send(msg)
