@@ -219,6 +219,16 @@ client.on("message", message => {
       })
   }
 
+  if (/^КУСЬ.?$/i.test(message.content)) {
+    msg = [
+      "КУСЬ!",
+      "( ᵒwᵒ)",
+      "кусь",
+      "(︶ω︶)"
+    ]
+    message.channel.send(pandemonium.choice(msg))
+  } 
+
   if (/^%\?\s.+/i.test(message.content)) {
     let msg = message.content
     let ili = /\sили\s/i
@@ -482,7 +492,7 @@ client.on("message", message => {
     }
   }
 
-  if (/^%todo\s.?/i.test(message.content) || /^%ещвщ\s.?/i.test(message.content)) {
+  if (/^%todo(\s.+)?$/i.test(message.content) || /^%ещвщ.?/i.test(message.content)) {
     let msg = message.content
     let splitter = /\s+/
     msg = msg.split(splitter).slice(1)
