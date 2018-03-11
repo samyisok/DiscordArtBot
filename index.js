@@ -26,6 +26,8 @@ const drawpileUser = drawpile.user
 const refsPath = "refs/"
 
 let helpWathcher = []
+let withoutMsgCounter = 0
+
 
 client.on("ready", () => {
   console.log("I am ready!")
@@ -95,14 +97,23 @@ client.on("ready", () => {
       })
       .catch(e => console.log(e))
 
-    console.log(helpWathcher)
     helpWathcher = []
+    withoutMsgCounter++
+    console.log(withoutMsgCounter)
+    if ( withoutMsgCounter > 14 ) {
+          const channel = client.guilds
+            .find("name", servername)
+            .channels.find("name", "general")
+          if (!channel) return
+          channel.send("буль (´・ω・`)")
+    }
   }, 60000)
 
   //if ( guild.available ) { console.log('guilds availible')};
 })
 
 client.on("message", message => {
+  if (withoutMsgCounter > 0 && message.guild.name === servername ) withoutMsgCounter = 0
   if (message.author.bot) return
   message.content = message.content.substr(0, 300)
   if (message.content === "%") {
