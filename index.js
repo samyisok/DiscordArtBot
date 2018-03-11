@@ -100,7 +100,7 @@ client.on("ready", () => {
     helpWathcher = []
     withoutMsgCounter++
     console.log(withoutMsgCounter)
-    if ( withoutMsgCounter > 14 ) {
+    if ( withoutMsgCounter > 34 ) {
           const channel = client.guilds
             .find("name", servername)
             .channels.find("name", "general")
@@ -123,7 +123,7 @@ client.on("message", message => {
       "Буль",
       "Бака!",
       "Анус себе дерни, бака!",
-      "Играешь небось!",
+      "Не рисуешь небось!",
       "Чего не рисуешь?",
       "Опять не рисуете?",
       "Скоро так разучитесь совсем рисовать",
@@ -482,7 +482,7 @@ client.on("message", message => {
     }
   }
 
-  if (/^%todo.?/i.test(message.content) || /^%ещвщ.?/i.test(message.content)) {
+  if (/^%todo\s.?/i.test(message.content) || /^%ещвщ\s.?/i.test(message.content)) {
     let msg = message.content
     let splitter = /\s+/
     msg = msg.split(splitter).slice(1)
