@@ -184,7 +184,7 @@ client.on("message", message => {
     /^%эт[оаи]/i.test(message.content) || 
     /^%!/i.test(message.content) 
   ) {
-      let answers = ['Да', 'Нет', 'Точно да', 'Определенно нет', 'Спросите у Хидоя!'] 
+      let answers = ['Да', 'Нет', 'Точно да', 'Определенно нет',  '( ◉‿◉ )', 'Спросите у Хидоя!'] 
       message.channel.send(pandemonium.choice(answers))
   }
 
