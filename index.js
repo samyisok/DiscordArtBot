@@ -115,9 +115,9 @@ client.on("ready", () => {
 
 client.on("message", message => {
   if (withoutMsgCounter > 0 && message.guild.name === servername ) withoutMsgCounter = 0
-  if ( message.guild.name === servername ){
+  if ( message.guild.name === servername && !_.includes(lastUsers, message.author.id) ){
     lastUsers.push(message.author.id)
-    if (lastUsers.length > 3) lastUsers.shift
+    if (lastUsers.length > 4) lastUsers.shift()
   }
   if (message.author.bot) return
   message.content = message.content.substr(0, 300)
@@ -195,7 +195,7 @@ client.on("message", message => {
     /^%эт[оаи]/i.test(message.content) || 
     /^%!/i.test(message.content) 
   ) {
-      let answers = ['Да', 'Нет', 'Точно да', 'Определенно нет',  '( ◉‿◉ )', 'Спросите у Хидоя!'] 
+      let answers = ['Да', 'Нет','Скорее да', 'Я думаю, что нет' , 'Точно да', 'Определенно нет', 'Возможно' ,'Да нет наверное' , '( ◉‿◉ )', 'Спросите у Хидоя!'] 
       message.channel.send(pandemonium.choice(answers))
   }
 
