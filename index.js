@@ -27,6 +27,7 @@ const refsPath = "refs/"
 
 let helpWathcher = []
 let withoutMsgCounter = 0
+let lastUsers = []
 
 
 client.on("ready", () => {
@@ -114,6 +115,10 @@ client.on("ready", () => {
 
 client.on("message", message => {
   if (withoutMsgCounter > 0 && message.guild.name === servername ) withoutMsgCounter = 0
+  if ( message.guild.name === servername ){
+    lastUsers.push(message.author.id)
+    if (lastUsers.length > 3) lastUsers.shift
+  }
   if (message.author.bot) return
   message.content = message.content.substr(0, 300)
   if (message.content === "%") {
@@ -130,6 +135,11 @@ client.on("message", message => {
       "( .\\_.)\n(.\\_. )"
     ]
     message.channel.send(pandemonium.choice(msgList))
+  }
+
+  if (/^%кто/i.test(message.content)){
+    msg = message.content.split(/\s+/)
+    message.channel.send('<@' +pandemonium.choice(lastUsers) + '> '+ msg[1])
   }
 
   if (
@@ -175,6 +185,7 @@ client.on("message", message => {
     msg += "%refs id [id] \n"
     msg += "%refs id [id] +[tag] -[tag]\n"
     msg += "%это [Легально, Вертолет, Эльф]?\n"
+    msg += "%кто [Бака, Кот, Эльф]?\n"
     msg += "%! [вопрос]?\n"
     msg += "```"
     message.channel.send(msg)
