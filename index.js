@@ -32,6 +32,20 @@ const urlArtstation =
   "https://www.artstation.com/projects.json?medium=digital2d&page=1&sorting=trending"
 let artArr = []
 
+let getArt = cb => {
+  if (artArr.length == 0) {
+    axios.get(urlArtstation).then(x => {
+      artArr = x.data.data
+      artArr.sort((a, b) => b.likes_count - a.likes_count)
+      console.log("get new data")
+      cb()
+    })
+  } else {
+    console.log("get old data")
+    cb()
+  }
+}
+
 client.on("ready", () => {
   console.log("I am ready!")
   console.log(servername)
@@ -103,13 +117,18 @@ client.on("ready", () => {
     helpWathcher = []
     withoutMsgCounter++
     console.log(withoutMsgCounter)
-    if (withoutMsgCounter > 34) {
-      artArr = [] // prepare for fresh data
+    if (withoutMsgCounter > 2) {
+      //artStation move
       const channel = client.guilds
         .find("name", servername)
         .channels.find("name", "general")
       if (!channel) return
-      channel.send("буль (´・ω・`)")
+      artArr = [] // prepare for fresh data
+      let sendArt = () => { 
+        channel.send(artArr[0].permalink)
+      }
+      getArt(sendArt)
+      withoutMsgCounter = -360
     }
   }, 60000)
 
@@ -150,18 +169,16 @@ client.on("message", message => {
   }
 
   if (/^%top/i.test(message.content)) {
-    if (artArr.length == 0) {
-      axios.get(urlArtstation).then(x => {
-        artArr = x.data.data
-        artArr.sort((a, b) => b.likes_count - a.likes_count)
+    let top = /topkek/i.test(message.content)
+    let sendMsg = () => {
+      if (top) {
+        message.channel.send(artArr[0].permalink)
+      } else {
         message.channel.send(pandemonium.choice(artArr).permalink)
-        console.log('get new data');
-        
-      })
-    } else {
-      console.log('get old data');
-      message.channel.send(pandemonium.choice(artArr).permalink)
+      }
     }
+
+    getArt(sendMsg)
   }
 
   if (
