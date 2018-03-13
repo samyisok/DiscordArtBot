@@ -31,6 +31,7 @@ let lastUsers = []
 const urlArtstation =
   "https://www.artstation.com/projects.json?medium=digital2d&page=1&sorting=trending"
 let artArr = []
+let artIndex = 0
 
 let getArt = cb => {
   if (artArr.length == 0) {
@@ -117,18 +118,23 @@ client.on("ready", () => {
     helpWathcher = []
     withoutMsgCounter++
     console.log(withoutMsgCounter)
-    if (withoutMsgCounter > 2) {
+    if (withoutMsgCounter > 20) {
       //artStation move
       const channel = client.guilds
         .find("name", servername)
         .channels.find("name", "general")
       if (!channel) return
       artArr = [] // prepare for fresh data
-      let sendArt = () => { 
-        channel.send(artArr[0].permalink)
+      let sendArt = () => {
+        channel.send(artArr[artIndex].permalink)
       }
       getArt(sendArt)
       withoutMsgCounter = -360
+      if (artIndex < 5) {
+        artIndex++
+      } else {
+        artIndex = 0
+      }
     }
   }, 60000)
 
@@ -169,21 +175,31 @@ client.on("message", message => {
   }
 
   if (/^%top/i.test(message.content)) {
+    let userId = message.author.id
+    console.log(helpWathcher)
+    if (_.includes(helpWathcher, userId)) {
+      message.react('⏱')
+      return
+    }
+
     let top = /topkek/i.test(message.content)
     let sendMsg = () => {
       if (top) {
         message.channel.send(artArr[0].permalink)
+        withoutMsgCounter = -360 //TODO
       } else {
         message.channel.send(pandemonium.choice(artArr).permalink)
       }
     }
 
     getArt(sendMsg)
+    helpWathcher.push(userId)
   }
 
   if (
     /^%drawpile/i.test(message.content) ||
-    /^%вкфцзшду/i.test(message.content)
+    /^%вкфцзшду/i.test(message.content) ||
+    /^%d$/i.test(message.content)
   ) {
     axios
       .get(drawpileUrl, {
