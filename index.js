@@ -28,7 +28,9 @@ const refsPath = "refs/"
 let helpWathcher = []
 let withoutMsgCounter = 0
 let lastUsers = []
-
+const urlArtstation =
+  "https://www.artstation.com/projects.json?medium=digital2d&page=1&sorting=trending"
+let artArr = []
 
 client.on("ready", () => {
   console.log("I am ready!")
@@ -101,12 +103,13 @@ client.on("ready", () => {
     helpWathcher = []
     withoutMsgCounter++
     console.log(withoutMsgCounter)
-    if ( withoutMsgCounter > 34 ) {
-          const channel = client.guilds
-            .find("name", servername)
-            .channels.find("name", "general")
-          if (!channel) return
-          channel.send("буль (´・ω・`)")
+    if (withoutMsgCounter > 34) {
+      artArr = [] // prepare for fresh data
+      const channel = client.guilds
+        .find("name", servername)
+        .channels.find("name", "general")
+      if (!channel) return
+      channel.send("буль (´・ω・`)")
     }
   }, 60000)
 
@@ -114,8 +117,12 @@ client.on("ready", () => {
 })
 
 client.on("message", message => {
-  if (withoutMsgCounter > 0 && message.guild.name === servername ) withoutMsgCounter = 0
-  if ( message.guild.name === servername && !_.includes(lastUsers, message.author.id) ){
+  if (withoutMsgCounter > 0 && message.guild.name === servername)
+    withoutMsgCounter = 0
+  if (
+    message.guild.name === servername &&
+    !_.includes(lastUsers, message.author.id)
+  ) {
     lastUsers.push(message.author.id)
     if (lastUsers.length > 4) lastUsers.shift()
   }
@@ -137,9 +144,24 @@ client.on("message", message => {
     message.channel.send(pandemonium.choice(msgList))
   }
 
-  if (/^%кто/i.test(message.content)){
+  if (/^%кто/i.test(message.content)) {
     msg = message.content.split(/\s+/)
-    message.channel.send('<@' +pandemonium.choice(lastUsers) + '> '+ msg[1])
+    message.channel.send("<@" + pandemonium.choice(lastUsers) + "> " + msg[1])
+  }
+
+  if (/^%top/i.test(message.content)) {
+    if (artArr.length == 0) {
+      axios.get(urlArtstation).then(x => {
+        artArr = x.data.data
+        artArr.sort((a, b) => b.likes_count - a.likes_count)
+        message.channel.send(pandemonium.choice(artArr).permalink)
+        console.log('get new data');
+        
+      })
+    } else {
+      console.log('get old data');
+      message.channel.send(pandemonium.choice(artArr).permalink)
+    }
   }
 
   if (
@@ -191,16 +213,26 @@ client.on("message", message => {
     message.channel.send(msg)
   }
 
-  if(
-    /^%эт[оаи]/i.test(message.content) || 
-    /^%!/i.test(message.content) 
-  ) {
-      let answers = ['Да', 'Нет','Скорее да', 'Я думаю, что нет' , 'Точно да', 'Определенно нет', 'Возможно' ,'Да нет наверное' , '( ◉‿◉ )', 'Спросите у Хидоя!'] 
-      message.channel.send(pandemonium.choice(answers))
+  if (/^%эт[оаи]/i.test(message.content) || /^%!/i.test(message.content)) {
+    let answers = [
+      "Да",
+      "Нет",
+      "Скорее да",
+      "Я думаю, что нет",
+      "Точно да",
+      "Определенно нет",
+      "Возможно",
+      "Да нет наверное",
+      "( ◉‿◉ )",
+      "Спросите у Хидоя!"
+    ]
+    message.channel.send(pandemonium.choice(answers))
   }
 
-  if( /^%точно/i.test(message.content) ) message.channel.send(pandemonium.choice( [ "Определенно точно", "Конечно точно", "Да!"] ))
-
+  if (/^%точно/i.test(message.content))
+    message.channel.send(
+      pandemonium.choice(["Определенно точно", "Конечно точно", "Да!"])
+    )
 
   if (
     /^%halp/i.test(message.content) ||
@@ -231,14 +263,9 @@ client.on("message", message => {
   }
 
   if (/^КУСЬ.?$/i.test(message.content)) {
-    msg = [
-      "КУСЬ!",
-      "( ᵒwᵒ)",
-      "кусь",
-      "(︶ω︶)"
-    ]
+    msg = ["КУСЬ!", "( ᵒwᵒ)", "кусь", "(︶ω︶)"]
     message.channel.send(pandemonium.choice(msg))
-  } 
+  }
 
   if (/^%\?\s.+/i.test(message.content)) {
     let msg = message.content
@@ -503,7 +530,10 @@ client.on("message", message => {
     }
   }
 
-  if (/^%todo(\s.+)?$/i.test(message.content) || /^%ещвщ.?/i.test(message.content)) {
+  if (
+    /^%todo(\s.+)?$/i.test(message.content) ||
+    /^%ещвщ.?/i.test(message.content)
+  ) {
     let msg = message.content
     let splitter = /\s+/
     msg = msg.split(splitter).slice(1)
@@ -614,6 +644,5 @@ client.on("guildMemberAdd", member => {
 try {
   client.login(codeBot)
 } catch (error) {
-  console.log(error)  
+  console.log(error)
 }
-
