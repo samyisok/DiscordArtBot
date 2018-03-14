@@ -16,7 +16,7 @@ const db = low(adapter)
 
 //lib start
 const common = require("./lib/common")
-
+const chooser = require("./lib/chooser")
 //lib end
 
 //config
@@ -316,14 +316,7 @@ client.on("message", message => {
   }
 
   if (/^%\?\s.+/i.test(message.content)) {
-    let msg = message.content
-    let ili = /\sили\s/i
-    let splitter = /\s+/
-    if (ili.test(msg)) {
-      splitter = ili
-    }
-    msg = msg.split(splitter).slice(1)
-    message.channel.send(pandemonium.choice(msg))
+    chooser.sendAnswer(message)
   }
 
   if (/^uuu+$/i.test(message.content)) {
