@@ -118,7 +118,7 @@ client.on("ready", () => {
     helpWathcher = []
     withoutMsgCounter++
     console.log(withoutMsgCounter)
-    if (withoutMsgCounter > 20) {
+    if (withoutMsgCounter > 29) {
       //artStation move
       const channel = client.guilds
         .find("name", servername)
@@ -183,8 +183,16 @@ client.on("message", message => {
     }
 
     let top = /topkek/i.test(message.content)
+    let top3 = /topkek3/i.test(message.content)
     let sendMsg = () => {
-      if (top) {
+      if (top3) {
+        msg = 'Current Top 3:\n'
+        +'<'+artArr[0].permalink + '>\n'
+        +'<'+artArr[1].permalink + '>\n'
+        +'<'+artArr[2].permalink + '>'
+        message.channel.send(msg)
+        withoutMsgCounter = -360 //TODO
+      } else if (top) {
         message.channel.send(artArr[0].permalink)
         withoutMsgCounter = -360 //TODO
       } else {
@@ -256,7 +264,6 @@ client.on("message", message => {
       "Определенно нет",
       "Возможно",
       "Да нет наверное",
-      "( ◉‿◉ )",
       "Спросите у Хидоя!"
     ]
     message.channel.send(pandemonium.choice(answers))
