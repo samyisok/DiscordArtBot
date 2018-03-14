@@ -25,6 +25,8 @@ const drawpilePass = drawpile.password
 const drawpileUser = drawpile.user
 const refsPath = "refs/"
 
+let common = require("./lib/common")
+
 let helpWathcher = []
 let withoutMsgCounter = 0
 let lastUsers = []
@@ -154,19 +156,7 @@ client.on("message", message => {
   if (message.author.bot) return
   message.content = message.content.substr(0, 300)
   if (message.content === "%") {
-    let msgList = [
-      "А могли бы рисовать!",
-      "Не пережирай",
-      "Буль",
-      "Бака!",
-      "Анус себе дерни, бака!",
-      "Не рисуешь небось!",
-      "Чего не рисуешь?",
-      "Опять не рисуете?",
-      "Скоро так разучитесь совсем рисовать",
-      "( .\\_.)\n(.\\_. )"
-    ]
-    message.channel.send(pandemonium.choice(msgList))
+    common.send(message)
   }
 
   if (/^%кто/i.test(message.content)) {
@@ -178,7 +168,7 @@ client.on("message", message => {
     let userId = message.author.id
     console.log(helpWathcher)
     if (_.includes(helpWathcher, userId)) {
-      message.react('⏱')
+      message.react("⏱")
       return
     }
 
@@ -186,10 +176,17 @@ client.on("message", message => {
     let top3 = /topkek3/i.test(message.content)
     let sendMsg = () => {
       if (top3) {
-        msg = 'Current Top 3:\n'
-        +'<'+artArr[0].permalink + '>\n'
-        +'<'+artArr[1].permalink + '>\n'
-        +'<'+artArr[2].permalink + '>'
+        msg =
+          "Current Top 3:\n" +
+          "<" +
+          artArr[0].permalink +
+          ">\n" +
+          "<" +
+          artArr[1].permalink +
+          ">\n" +
+          "<" +
+          artArr[2].permalink +
+          ">"
         message.channel.send(msg)
         withoutMsgCounter = -360 //TODO
       } else if (top) {
