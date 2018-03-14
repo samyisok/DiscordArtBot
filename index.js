@@ -14,6 +14,12 @@ const FileSync = require("lowdb/adapters/FileSync")
 const adapter = new FileSync("db.json")
 const db = low(adapter)
 
+//lib start
+const common = require("./lib/common")
+
+//lib end
+
+//config
 const config = require("config")
 const drawpile = config.get("drawpile")
 const servername = config.get("app").guild
@@ -24,17 +30,18 @@ const drawpileUrl = drawpile.url
 const drawpilePass = drawpile.password
 const drawpileUser = drawpile.user
 const refsPath = "refs/"
+const urlArtstation = 
+    "https://www.artstation.com/projects.json?medium=digital2d&page=1&sorting=trending"
 
-let common = require("./lib/common")
-
+//vars
 let helpWathcher = []
 let withoutMsgCounter = 0
 let lastUsers = []
-const urlArtstation =
-  "https://www.artstation.com/projects.json?medium=digital2d&page=1&sorting=trending"
 let artArr = []
 let artIndex = 0
 
+
+//inbuild fn
 let getArt = cb => {
   if (artArr.length == 0) {
     axios.get(urlArtstation).then(x => {
@@ -48,6 +55,8 @@ let getArt = cb => {
     cb()
   }
 }
+
+//start
 
 client.on("ready", () => {
   console.log("I am ready!")
@@ -154,7 +163,9 @@ client.on("message", message => {
     if (lastUsers.length > 4) lastUsers.shift()
   }
   if (message.author.bot) return
+
   message.content = message.content.substr(0, 300)
+
   if (message.content === "%") {
     common.send(message)
   }
