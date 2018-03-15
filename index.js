@@ -17,18 +17,20 @@ const db = low(adapter)
 //lib start
 const common = require("./lib/common")
 const chooser = require("./lib/chooser")
+const drawpile = require("./lib/drawpile")
 //lib end
 
 //config
 const config = require("config")
-const drawpile = config.get("drawpile")
+const drawpileConf = config.get("drawpile")
 const servername = config.get("app").guild
 const codeBot = config.get("app").code
 const maxFileSize = 8000000
 
-const drawpileUrl = drawpile.url
-const drawpilePass = drawpile.password
-const drawpileUser = drawpile.user
+const drawpileUrl = drawpileConf.url
+const drawpileUrlTxt = drawpileConf.urlTxt
+const drawpilePass = drawpileConf.password
+const drawpileUser = drawpileConf.user
 const refsPath = "refs/"
 const urlArtstation = 
     "https://www.artstation.com/projects.json?medium=digital2d&page=1&sorting=trending"
@@ -217,25 +219,7 @@ client.on("message", message => {
     /^%вкфцзшду/i.test(message.content) ||
     /^%d$/i.test(message.content)
   ) {
-    axios
-      .get(drawpileUrl, {
-        auth: {
-          username: drawpileUser,
-          password: drawpilePass
-        }
-      })
-      .then(res => {
-        let data = []
-        res.data.forEach(x => data.push(x.name))
-        let msg = "<http://2draw.me/drawpile/> - "
-        if (data.length === 0) {
-          msg += "Но в дравпайле никого нет 😭"
-        } else {
-          data = _.uniq(data)
-          msg += "Пользователи в Drawpile: " + data.join(", ")
-        }
-        message.channel.send(msg)
-      })
+      drawpile.sendUsers(message, drawpileConf)
   }
 
   if (/^%эт[оаи]/i.test(message.content) || /^%!/i.test(message.content)) {
