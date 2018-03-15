@@ -238,30 +238,6 @@ client.on("message", message => {
       })
   }
 
-  if (/^%help/i.test(message.content) || /^%рудз/i.test(message.content)) {
-    let msg = "```\n"
-    msg += "список команд:\n"
-    msg += "%drawpile\n"
-    msg += "%? foo или bar\n"
-    msg += "%halp\n"
-    msg += "%help\n"
-    msg += "%todo\n"
-    msg += "%todo add [text]\n"
-    msg += "%todo del [todo_id]\n"
-    msg += "%todo [username]\n"
-    msg += "%refs add [url] [tag] [tag] ... \n"
-    msg += "%refs\n"
-    msg += "%refs [tag]\n"
-    msg += "%refs [tag] [tag] ... \n"
-    msg += "%refs id [id] \n"
-    msg += "%refs id [id] +[tag] -[tag]\n"
-    msg += "%это [Легально, Вертолет, Эльф]?\n"
-    msg += "%кто [Бака, Кот, Эльф]?\n"
-    msg += "%! [вопрос]?\n"
-    msg += "```"
-    message.channel.send(msg)
-  }
-
   if (/^%эт[оаи]/i.test(message.content) || /^%!/i.test(message.content)) {
     let answers = [
       "Да",
