@@ -543,17 +543,10 @@ client.on("message", message => {
   }
 })
 
-//выпелить в проде
-//client.on('messageDelete', message => {
-//    message.reply('I see, you delete some msg <_<');
-//});
 
 client.on("guildMemberAdd", member => {
-  // Send the message to a designated channel on a server:
   const channel = member.guild.channels.find("name", "welcome")
-  // Do nothing if the channel wasn't found on this server
   if (!channel) return
-  // Send the message, mentioning the member
   channel.send(
     `Сейчас придут специально обученные люди и выдадут вам кота, ${member}`
   )
