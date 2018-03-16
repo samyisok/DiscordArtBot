@@ -283,7 +283,7 @@ client.on("message", message => {
     message.react("🍆")
   }
 
-  if(/(^|\ )+бутер(\s|$)+/i.test(message.content)) {
+  if(/(^|\ )+бутер[ы]?(\s|$)+/i.test(message.content)) {
     message.react("🍔")
   }
 
