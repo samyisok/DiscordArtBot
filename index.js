@@ -154,7 +154,8 @@ client.on("message", message => {
 
   if (/^%кто/i.test(message.content)) {
     msg = message.content.split(/\s+/)
-    message.channel.send("<@" + pandemonium.choice(lastUsers) + "> " + msg[1])
+    let user = (lastUsers.length !== 0) ? pandemonium.choice(lastUsers) : message.author.id
+    message.channel.send("<@" + user + "> " + msg.slice(1).join(' '))
   }
 
   if (/^%top/i.test(message.content)) {
