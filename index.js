@@ -19,6 +19,7 @@ const common = require("./lib/common")
 const chooser = require("./lib/chooser")
 const drawpile = require("./lib/drawpile")
 const todo = require("./lib/todo")
+const artstation = require("./lib/artstation")
 //lib end
 
 //config
@@ -33,7 +34,7 @@ const drawpileUrlTxt = drawpileConf.urlTxt
 const drawpilePass = drawpileConf.password
 const drawpileUser = drawpileConf.user
 const refsPath = "refs/"
-const urlArtstation =  config.get("app").urlArtstation
+const urlArtstation = config.get("app").urlArtstation
 
 //vars
 let helpWathcher = []
@@ -42,21 +43,6 @@ let lastUsers = []
 let artArr = []
 let artIndex = 0
 
-
-//inbuild fn
-let getArt = cb => {
-  if (artArr.length == 0) {
-    axios.get(urlArtstation).then(x => {
-      artArr = x.data.data
-      artArr.sort((a, b) => b.likes_count - a.likes_count)
-      console.log("get new data")
-      cb()
-    })
-  } else {
-    console.log("get old data")
-    cb()
-  }
-}
 
 //start
 
@@ -131,23 +117,17 @@ client.on("ready", () => {
     helpWathcher = []
     withoutMsgCounter++
     console.log(withoutMsgCounter)
-    if (withoutMsgCounter > 29) {
+
+    if (withoutMsgCounter > 25) {
       //artStation move
       const channel = client.guilds
         .find("name", servername)
         .channels.find("name", "general")
       if (!channel) return
-      artArr = [] // prepare for fresh data
-      let sendArt = () => {
-        channel.send(artArr[artIndex].permalink)
-      }
-      getArt(sendArt)
-      withoutMsgCounter = -360
-      if (artIndex < 5) {
-        artIndex++
-      } else {
-        artIndex = 0
-      }
+      artstation.clearTop() // prepare for fresh data
+
+      artstation.sendTop10(channel)
+      withoutMsgCounter = -300
     }
   }, 60000)
 
@@ -180,37 +160,14 @@ client.on("message", message => {
   if (/^%top/i.test(message.content)) {
     let userId = message.author.id
     console.log(helpWathcher)
+
     if (_.includes(helpWathcher, userId)) {
       message.react("⏱")
       return
     }
 
-    let top = /topkek/i.test(message.content)
-    let top3 = /topkek3/i.test(message.content)
-    let sendMsg = () => {
-      if (top3) {
-        msg =
-          "Current Top 3:\n" +
-          "<" +
-          artArr[0].permalink +
-          ">\n" +
-          "<" +
-          artArr[1].permalink +
-          ">\n" +
-          "<" +
-          artArr[2].permalink +
-          ">"
-        message.channel.send(msg)
-        withoutMsgCounter = -360 //TODO
-      } else if (top) {
-        message.channel.send(artArr[0].permalink)
-        withoutMsgCounter = -360 //TODO
-      } else {
-        message.channel.send(pandemonium.choice(artArr).permalink)
-      }
-    }
+    artstation.getTop(message)
 
-    getArt(sendMsg)
     helpWathcher.push(userId)
   }
 
@@ -219,7 +176,7 @@ client.on("message", message => {
     /^%вкфцзшду/i.test(message.content) ||
     /^%d$/i.test(message.content)
   ) {
-      drawpile.sendUsers(message, drawpileConf)
+    drawpile.sendUsers(message, drawpileConf)
   }
 
   if (/^%эт[оаи]/i.test(message.content) || /^%!/i.test(message.content)) {
@@ -283,7 +240,7 @@ client.on("message", message => {
     message.react("🍆")
   }
 
-  if(/(^|\ )+бутер[ы]?(\s|$)+/i.test(message.content)) {
+  if (/(^|\ )+бутер[ы]?(\s|$)+/i.test(message.content)) {
     message.react("🍔")
   }
 
@@ -542,7 +499,6 @@ client.on("message", message => {
     todo.check(message, db)
   }
 })
-
 
 client.on("guildMemberAdd", member => {
   const channel = member.guild.channels.find("name", "welcome")
