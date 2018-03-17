@@ -20,7 +20,8 @@ const chooser = require("./lib/chooser")
 const drawpile = require("./lib/drawpile")
 const todo = require("./lib/todo")
 const artstation = require("./lib/artstation")
-const ref = require('./lib/ref')
+const ref = require("./lib/ref")
+const definer = require("./lib/definer")
 //lib end
 
 //config
@@ -43,7 +44,6 @@ let withoutMsgCounter = 0
 let lastUsers = []
 let artArr = []
 let artIndex = 0
-
 
 //start
 
@@ -155,8 +155,9 @@ client.on("message", message => {
 
   if (/^%кто/i.test(message.content)) {
     msg = message.content.split(/\s+/)
-    let user = (lastUsers.length !== 0) ? pandemonium.choice(lastUsers) : message.author.id
-    message.channel.send("<@" + user + "> " + msg.slice(1).join(' '))
+    let user =
+      lastUsers.length !== 0 ? pandemonium.choice(lastUsers) : message.author.id
+    message.channel.send("<@" + user + "> " + msg.slice(1).join(" "))
   }
 
   if (/^%top/i.test(message.content)) {
@@ -182,18 +183,7 @@ client.on("message", message => {
   }
 
   if (/^%эт[оаи]/i.test(message.content) || /^%!/i.test(message.content)) {
-    let answers = [
-      "Да",
-      "Нет",
-      "Скорее да",
-      "Я думаю, что нет",
-      "Точно да",
-      "Определенно нет",
-      "Возможно",
-      "Да нет наверное",
-      "Спросите у Хидоя!"
-    ]
-    message.channel.send(pandemonium.choice(answers))
+    definer.run(message)
   }
 
   if (/^%точно/i.test(message.content))
@@ -253,7 +243,6 @@ client.on("message", message => {
     /^%куа.?/i.test(message.content)
   ) {
     ref.run(message, db)
-
   }
 
   if (
