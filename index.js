@@ -57,7 +57,8 @@ client.on("ready", () => {
       refs: [],
       tagGroups: [],
       todoCount: 0,
-      refsCount: 0
+      refsCount: 0,
+      tagGroupCount: 0
     })
     .write()
   let listUsers = []
