@@ -50,13 +50,12 @@ let artIndex = 0
 client.on("ready", () => {
   console.log("I am ready!")
   console.log(servername)
-  // let myVar = client.channels.find('name', 'general');
-  // myVar.send('boss, i am ready!');
 
   db
     .defaults({
       todo: [],
       refs: [],
+      tagGroups: [],
       todoCount: 0,
       refsCount: 0
     })
@@ -131,8 +130,6 @@ client.on("ready", () => {
       withoutMsgCounter = -300
     }
   }, 60000)
-
-  //if ( guild.available ) { console.log('guilds availible')};
 })
 
 client.on("message", message => {
@@ -233,6 +230,7 @@ client.on("message", message => {
     /^%ref.?/i.test(message.content) ||
     /^%refs.?/i.test(message.content) ||
     /^%куаы.?/i.test(message.content) ||
+    /^%реф.?/i.test(message.content) ||
     /^%куа.?/i.test(message.content)
   ) {
     ref.run(message, db)
