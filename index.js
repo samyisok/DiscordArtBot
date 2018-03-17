@@ -3,7 +3,6 @@ const Discord = require("discord.js")
 const client = new Discord.Client()
 const util = require("util")
 const pandemonium = require("pandemonium")
-const listFilepaths = require("list-filepaths")
 const axios = require("axios")
 const uuid = require("uuid/v4")
 const fs = require("fs")
@@ -22,6 +21,7 @@ const todo = require("./lib/todo")
 const artstation = require("./lib/artstation")
 const ref = require("./lib/ref")
 const definer = require("./lib/definer")
+const helper = require("./lib/helper")
 //lib end
 
 //config
@@ -199,24 +199,17 @@ client.on("message", message => {
   ) {
     let userId = message.author.id
     console.log(helpWathcher)
+
     if (_.includes(helpWathcher, userId)) {
       message.channel.send(
         "Я недавно уже помогала, пользуйся прошлой картинкой"
       )
       return
     }
-    listFilepaths("./halp")
-      .then(filepaths => {
-        let path = pandemonium.choice(filepaths)
-        message.channel.send("send help", {
-          files: [path]
-        })
-        helpWathcher.push(userId)
-      })
-      .catch(err => {
-        // Handle errors
-        console.error(err)
-      })
+
+    helper.run(message).then(
+      helpWathcher.push(userId)
+    )
   }
 
   if (/^КУСЬ.?$/i.test(message.content)) {
