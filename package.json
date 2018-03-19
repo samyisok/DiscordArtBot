@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
+    "bufferutil": "^3.0.3",
     "config": "^1.29.4",
     "discord.js": "^11.3.0",
     "list-filepaths": "^1.6.5",
