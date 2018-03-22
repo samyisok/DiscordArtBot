@@ -13,6 +13,8 @@ const FileSync = require("lowdb/adapters/FileSync")
 const adapter = new FileSync("db.json")
 const db = low(adapter)
 
+const winston = require('winston')
+
 //lib start
 const common = require("./lib/common")
 const chooser = require("./lib/chooser")
@@ -45,12 +47,12 @@ let lastUsers = []
 let artArr = []
 let artIndex = 0
 
+//init logger winson
+const log = require('./lib/log')
 //start
 
 client.on("ready", () => {
-  console.log("I am ready!")
-  console.log(servername)
-
+  log.info('i am ready on ' + servername)
   db
     .defaults({
       todo: [],
@@ -106,18 +108,18 @@ client.on("ready", () => {
           channel.send(
             "<http://2draw.me/drawpile/> - Зашел: " + diff.join(", ")
           )
+          log.info("Из drowpile зашли, разница:" + diff.join(', '))
         }
 
         if (reverseDiff.length > 0) {
-          console.log("reverseDiff on")
+          log.info("Из drowpile вышли, разница:" + reverseDiff.join(', '))
           listUsers = newListUsers
         }
       })
-      .catch(e => console.log(e))
+      .catch(e => log.warn(e))
 
     helpWathcher = []
     withoutMsgCounter++
-    console.log(withoutMsgCounter)
 
     if (withoutMsgCounter > 25) {
       //artStation move
@@ -145,6 +147,12 @@ client.on("message", message => {
   }
   if (message.author.bot) return
 
+  if ( /^%/.test(message.content) ) {
+    log.info("CMDIN: " + message.content)
+  } else {
+    return
+  }
+
   message.content = message.content.substr(0, 300)
 
   if (message.content === "%") {
@@ -160,7 +168,6 @@ client.on("message", message => {
 
   if (/^%top/i.test(message.content)) {
     let userId = message.author.id
-    console.log(helpWathcher)
 
     if (_.includes(helpWathcher, userId)) {
       message.react("⏱")
@@ -196,7 +203,6 @@ client.on("message", message => {
     /^%херп/i.test(message.content)
   ) {
     let userId = message.author.id
-    console.log(helpWathcher)
 
     if (_.includes(helpWathcher, userId)) {
       message.channel.send(
@@ -256,5 +262,5 @@ client.on("guildMemberAdd", member => {
 try {
   client.login(codeBot)
 } catch (error) {
-  console.log(error)
+  log.error(error)
 }
