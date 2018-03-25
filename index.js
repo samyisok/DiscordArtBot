@@ -147,6 +147,18 @@ client.on("message", message => {
   }
   if (message.author.bot) return
 
+
+  if (/^u+$/i.test(message.content)) {
+    message.react("🍆")
+  }
+
+  if (/(^|\ )+бутер[ы]?(\s|$)+/i.test(message.content)) {
+    message.react("🍔")
+  }
+
+
+
+
   if ( /^%/.test(message.content) ) {
     log.info("CMDIN: " + message.content)
   } else {
@@ -223,14 +235,6 @@ client.on("message", message => {
 
   if (/^%\?\s.+/i.test(message.content)) {
     chooser.sendAnswer(message)
-  }
-
-  if (/^uuu+$/i.test(message.content)) {
-    message.react("🍆")
-  }
-
-  if (/(^|\ )+бутер[ы]?(\s|$)+/i.test(message.content)) {
-    message.react("🍔")
   }
 
   if (
