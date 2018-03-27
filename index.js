@@ -24,6 +24,7 @@ const artstation = require("./lib/artstation")
 const ref = require("./lib/ref")
 const definer = require("./lib/definer")
 const helper = require("./lib/helper")
+const req = require("./lib/req")
 //lib end
 
 //config
@@ -63,10 +64,12 @@ client.on("ready", () => {
     .defaults({
       todo: [],
       refs: [],
+      req: [],
       tagGroups: [],
       todoCount: 0,
       refsCount: 0,
-      tagGroupCount: 0
+      tagGroupCount: 0,
+      reqCount: 0
     })
     .write()
   let listUsers = []
@@ -153,6 +156,20 @@ client.on("message", message => {
   }
   if (message.author.bot) return
 
+  if (/^u+$/i.test(message.content)) {
+    message.react("🍆")
+  }
+
+  if (/(^|\ )+бутер[ы]?(\s|$)+/i.test(message.content)) {
+    message.react("🍔")
+  }
+
+  if (/^%/.test(message.content)) {
+    log.info("CMDIN: " + message.content)
+  } else {
+    return
+  }
+
   if (
     message.author.id == 377065326841692160 &&
     message.guild.name === masterChannel &&
@@ -169,20 +186,6 @@ client.on("message", message => {
     if (!channel) return
 
     channel.send(msg)
-  }
-
-  if (/^u+$/i.test(message.content)) {
-    message.react("🍆")
-  }
-
-  if (/(^|\ )+бутер[ы]?(\s|$)+/i.test(message.content)) {
-    message.react("🍔")
-  }
-
-  if (/^%/.test(message.content)) {
-    log.info("CMDIN: " + message.content)
-  } else {
-    return
   }
 
   message.content = message.content.substr(0, 300)
@@ -272,6 +275,12 @@ client.on("message", message => {
   ) {
     todo.check(message, db)
   }
+
+  if( /^%req(\s.+)?$/i.test(message.content) ){
+    req.add(message, db)
+  }
+
+
 })
 
 client.on("guildMemberAdd", member => {
