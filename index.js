@@ -13,7 +13,7 @@ const FileSync = require("lowdb/adapters/FileSync")
 const adapter = new FileSync("db.json")
 const db = low(adapter)
 
-const winston = require('winston')
+const winston = require("winston")
 
 //lib start
 const common = require("./lib/common")
@@ -51,13 +51,14 @@ let artIndex = 0
 const maxUsers = 5
 const pauseArt = -300
 const silenceTime = 20
+const masterChannel = "High_Shinkai_Labs"
 
 //init logger winson
-const log = require('./lib/log')
+const log = require("./lib/log")
 //start
 
 client.on("ready", () => {
-  log.info('i am ready on ' + servername)
+  log.info("i am ready on " + servername)
   db
     .defaults({
       todo: [],
@@ -113,11 +114,11 @@ client.on("ready", () => {
           channel.send(
             "<http://2draw.me/drawpile/> - Зашел: " + diff.join(", ")
           )
-          log.info("Из drowpile зашли, разница:" + diff.join(', '))
+          log.info("Из drowpile зашли, разница:" + diff.join(", "))
         }
 
         if (reverseDiff.length > 0) {
-          log.info("Из drowpile вышли, разница:" + reverseDiff.join(', '))
+          log.info("Из drowpile вышли, разница:" + reverseDiff.join(", "))
           listUsers = newListUsers
         }
       })
@@ -152,6 +153,23 @@ client.on("message", message => {
   }
   if (message.author.bot) return
 
+  if (
+    message.author.id == 377065326841692160 &&
+    message.guild.name === masterChannel &&
+    /^%анонс\s+/i.test(message.content)
+  ) {
+    let msg = message.content
+      .split(/\s+/)
+      .slice(1)
+      .join(" ")
+
+    const channel = client.guilds
+      .find("name", servername)
+      .channels.find("name", "general")
+    if (!channel) return
+
+    channel.send(msg)
+  }
 
   if (/^u+$/i.test(message.content)) {
     message.react("🍆")
@@ -161,10 +179,7 @@ client.on("message", message => {
     message.react("🍔")
   }
 
-
-
-
-  if ( /^%/.test(message.content) ) {
+  if (/^%/.test(message.content)) {
     log.info("CMDIN: " + message.content)
   } else {
     return
@@ -229,9 +244,7 @@ client.on("message", message => {
       return
     }
 
-    helper.run(message).then(
-      helpWathcher.push(userId)
-    )
+    helper.run(message).then(helpWathcher.push(userId))
   }
 
   if (/^КУСЬ.?$/i.test(message.content)) {
