@@ -47,6 +47,11 @@ let lastUsers = []
 let artArr = []
 let artIndex = 0
 
+//const list
+const maxUsers = 5
+const pauseArt = -300
+const silenceTime = 20
+
 //init logger winson
 const log = require('./lib/log')
 //start
@@ -121,7 +126,7 @@ client.on("ready", () => {
     helpWathcher = []
     withoutMsgCounter++
 
-    if (withoutMsgCounter > 25) {
+    if (withoutMsgCounter > silenceTime) {
       //artStation move
       const channel = client.guilds
         .find("name", servername)
@@ -130,7 +135,7 @@ client.on("ready", () => {
       artstation.clearTop() // prepare for fresh data
 
       artstation.sendTop10(channel)
-      withoutMsgCounter = -300
+      withoutMsgCounter = pauseArt
     }
   }, 60000)
 })
@@ -143,7 +148,7 @@ client.on("message", message => {
     !_.includes(lastUsers, message.author.id)
   ) {
     lastUsers.push(message.author.id)
-    if (lastUsers.length > 4) lastUsers.shift()
+    if (lastUsers.length > maxUsers) lastUsers.shift()
   }
   if (message.author.bot) return
 
@@ -194,7 +199,8 @@ client.on("message", message => {
   if (
     /^%drawpile/i.test(message.content) ||
     /^%вкфцзшду/i.test(message.content) ||
-    /^%d$/i.test(message.content)
+    /^%d$/i.test(message.content) ||
+    /^%в$/i.test(message.content)
   ) {
     drawpile.sendUsers(message, drawpileConf)
   }
@@ -209,10 +215,10 @@ client.on("message", message => {
     )
 
   if (
-    /^%halp/i.test(message.content) ||
+    /^%h[ea][rl]p/i.test(message.content) ||
     /^%рфдз/i.test(message.content) ||
-    /^%памагите/i.test(message.content) ||
-    /^%херп/i.test(message.content)
+    /^%памаги(те)?/i.test(message.content) ||
+    /^%х[ае][рл]п/i.test(message.content)
   ) {
     let userId = message.author.id
 
