@@ -276,11 +276,12 @@ client.on("message", message => {
     todo.check(message, db)
   }
 
-  if( /^%req(\s.+)?$/i.test(message.content) ){
+  if (
+    /^%req(\s.+)?$/i.test(message.content) ||
+    /^%report(\s.+)?$/i.test(message.content)
+  ) {
     req.add(message, db)
   }
-
-
 })
 
 client.on("guildMemberAdd", member => {
