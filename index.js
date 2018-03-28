@@ -157,11 +157,11 @@ client.on("message", message => {
   if (message.author.bot) return
 
   if (/^u+$/i.test(message.content)) {
-    message.react("🍆")
+    message.react("🍆").catch(e => log.warn(e.message))
   }
 
   if (/(^|\ )+бутер[ы]?(\s|$)+/i.test(message.content)) {
-    message.react("🍔")
+    message.react("🍔").catch( e => log.warn(e.message))
   }
 
   if (/^%/.test(message.content)) {
@@ -205,7 +205,7 @@ client.on("message", message => {
     let userId = message.author.id
 
     if (_.includes(helpWathcher, userId)) {
-      message.react("⏱")
+      message.react("⏱").catch(e => log.warn(e.message))
       return
     }
 
