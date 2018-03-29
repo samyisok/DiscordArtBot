@@ -74,7 +74,7 @@ client.on("ready", () => {
     })
     .write()
 
-  setInterval( function() {
+  setInterval(function() {
     drawpile.checkUsers(client, newURL, masterChannel)
 
     helpWathcher = []
@@ -111,7 +111,12 @@ client.on("message", message => {
   }
 
   if (/(^|\ )+бутер[ы]?(\s|$)+/i.test(message.content)) {
-    message.react("🍔").catch( e => log.warn(e.message))
+    message.react("🍔").catch(e => log.warn(e.message))
+  }
+
+  if (/^КУСЬ.?$/i.test(message.content)) {
+    msg = ["КУСЬ!", "( ᵒwᵒ)", "кусь", "(︶ω︶)"]
+    message.channel.send(pandemonium.choice(msg))
   }
 
   if (/^%/.test(message.content)) {
@@ -198,11 +203,6 @@ client.on("message", message => {
     }
 
     helper.run(message).then(helpWathcher.push(userId))
-  }
-
-  if (/^КУСЬ.?$/i.test(message.content)) {
-    msg = ["КУСЬ!", "( ᵒwᵒ)", "кусь", "(︶ω︶)"]
-    message.channel.send(pandemonium.choice(msg))
   }
 
   if (/^%\?\s.+/i.test(message.content)) {
