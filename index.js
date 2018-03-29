@@ -40,10 +40,11 @@ const drawpilePass = drawpileConf.password
 const drawpileUser = drawpileConf.user
 const refsPath = "refs/"
 const urlArtstation = config.get("app").urlArtstation
+let newURL = "http://2draw.me/drawpile/users.txt"
 
 //vars
 let helpWathcher = []
-let withoutMsgCounter = 0
+let withoutMsgCounter = -300
 let lastUsers = []
 let artArr = []
 let artIndex = 0
@@ -72,60 +73,9 @@ client.on("ready", () => {
       reqCount: 0
     })
     .write()
-  let listUsers = []
-  let newListUsers = []
-  let firstLaunch = true
-  setInterval(function() {
-    axios
-      .get(drawpileUrl, {
-        auth: {
-          username: drawpileUser,
-          password: drawpilePass
-        }
-      })
-      .then(res => {
-        let data = []
-        res.data.forEach(x => data.push(x.name))
-        newListUsers = data
 
-        let reverseDiff = []
-        listUsers.forEach(x => {
-          if (!newListUsers.includes(x)) {
-            reverseDiff.push(x)
-          }
-        })
-
-        let diff = []
-        newListUsers.forEach(x => {
-          if (!listUsers.includes(x)) {
-            diff.push(x)
-          }
-        })
-
-        if (firstLaunch) {
-          listUsers = newListUsers
-          firstLaunch = false
-          return
-        }
-
-        if (diff.length > 0) {
-          const channel = client.guilds
-            .find("name", servername)
-            .channels.find("name", "general")
-          if (!channel) return
-          listUsers = newListUsers
-          channel.send(
-            "<http://2draw.me/drawpile/> - Зашел: " + diff.join(", ")
-          )
-          log.info("Из drowpile зашли, разница:" + diff.join(", "))
-        }
-
-        if (reverseDiff.length > 0) {
-          log.info("Из drowpile вышли, разница:" + reverseDiff.join(", "))
-          listUsers = newListUsers
-        }
-      })
-      .catch(e => log.warn(e))
+  setInterval( function() {
+    drawpile.checkUsers(client, newURL, masterChannel)
 
     helpWathcher = []
     withoutMsgCounter++
