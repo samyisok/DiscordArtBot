@@ -75,7 +75,7 @@ client.on("ready", () => {
     .write()
 
   setInterval(function() {
-    drawpile.checkUsers(client, newURL, masterChannel)
+    drawpile.checkUsers(client, newURL, [servername, masterChannel])
 
     helpWathcher = []
     withoutMsgCounter++
