@@ -34,13 +34,9 @@ const servername = config.get("app").guild
 const codeBot = config.get("app").code
 const maxFileSize = 8000000
 
-const drawpileUrl = drawpileConf.url
 const drawpileUrlTxt = drawpileConf.urlTxt
-const drawpilePass = drawpileConf.password
-const drawpileUser = drawpileConf.user
 const refsPath = "refs/"
 const urlArtstation = config.get("app").urlArtstation
-let newURL = "http://2draw.me/drawpile/users.txt"
 
 //vars
 let helpWathcher = []
@@ -75,7 +71,7 @@ client.on("ready", () => {
     .write()
 
   setInterval(function() {
-    drawpile.checkUsers(client, newURL, [servername, masterChannel])
+    drawpile.checkUsers(client, drawpileUrlTxt, [servername, masterChannel])
 
     helpWathcher = []
     withoutMsgCounter++
@@ -175,7 +171,7 @@ client.on("message", message => {
     /^%d$/i.test(message.content) ||
     /^%в$/i.test(message.content)
   ) {
-    drawpile.sendUsers(message, drawpileConf)
+    drawpile.sendUsers(message, drawpileUrlTxt)
   }
 
   if (/^%эт[оаи]/i.test(message.content) || /^%!/i.test(message.content)) {
