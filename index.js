@@ -91,6 +91,7 @@ client.on("ready", () => {
 })
 
 client.on("message", message => {
+
   if (withoutMsgCounter > 0 && message.guild.name === servername)
     withoutMsgCounter = 0
   if (
@@ -112,7 +113,7 @@ client.on("message", message => {
 
   if (/^КУСЬ.?$/i.test(message.content)) {
     msg = ["КУСЬ!", "( ᵒwᵒ)", "кусь", "(︶ω︶)"]
-    message.channel.send(pandemonium.choice(msg))
+    message.channel.send(pandemonium.choice(msg)).then( res => log.logSend(res))
   }
 
   if (/^%/.test(message.content)) {
@@ -136,20 +137,20 @@ client.on("message", message => {
       .channels.find("name", "general")
     if (!channel) return
 
-    channel.send(msg)
+    channel.send(msg).then( res => log.logSend(res))
   }
 
   message.content = message.content.substr(0, 300)
 
   if (message.content === "%") {
-    common.send(message)
+    common.send(message).then( res => log.logSend(res))
   }
 
   if (/^%кто/i.test(message.content)) {
     msg = message.content.split(/\s+/)
     let user =
       lastUsers.length !== 0 ? pandemonium.choice(lastUsers) : message.author.id
-    message.channel.send("<@" + user + "> " + msg.slice(1).join(" "))
+    message.channel.send("<@" + user + "> " + msg.slice(1).join(" ")).then( res => log.logSend(res))
   }
 
   if (/^%top/i.test(message.content)) {
@@ -180,7 +181,7 @@ client.on("message", message => {
 
   if (/^%точно/i.test(message.content))
     message.channel.send(
-      pandemonium.choice(["Определенно точно", "Конечно точно", "Да!"])
+      pandemonium.choice(["Определенно точно", "Конечно точно", "Да!"]).then( res => log.logSend(res))
     )
 
   if (
@@ -194,7 +195,7 @@ client.on("message", message => {
     if (_.includes(helpWathcher, userId)) {
       message.channel.send(
         "Я недавно уже помогала, пользуйся прошлой картинкой"
-      )
+      ).then( res => log.logSend(res))
       return
     }
 
@@ -235,7 +236,7 @@ client.on("guildMemberAdd", member => {
   if (!channel) return
   channel.send(
     `Сейчас придут специально обученные люди и выдадут вам кота, ${member}`
-  )
+  ).then( res => log.logSend(res))
 })
 
 try {
