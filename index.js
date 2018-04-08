@@ -143,7 +143,7 @@ client.on("message", message => {
   message.content = message.content.substr(0, 300)
 
   if (message.content === "%") {
-    common.send(message).then( res => log.logSend(res))
+    common.send(message)
   }
 
   if (/^%кто/i.test(message.content)) {
