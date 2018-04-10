@@ -91,7 +91,6 @@ client.on("ready", () => {
 })
 
 client.on("message", message => {
-
   if (withoutMsgCounter > 0 && message.guild.name === servername)
     withoutMsgCounter = 0
   if (
@@ -104,16 +103,19 @@ client.on("message", message => {
   if (message.author.bot) return
 
   if (/^u+$/i.test(message.content)) {
-    message.react("🍆").catch(e => log.warn(e.message))
+    message.react("🍆").catch(e => log.logError(e))
   }
 
   if (/(^|\ )+бутер[ы]?(\s|$)+/i.test(message.content)) {
-    message.react("🍔").catch(e => log.warn(e.message))
+    message.react("🍔").catch(e => log.logError(e))
   }
 
   if (/^КУСЬ.?$/i.test(message.content)) {
     msg = ["КУСЬ!", "( ᵒwᵒ)", "кусь", "(︶ω︶)"]
-    message.channel.send(pandemonium.choice(msg)).then( res => log.logSend(res))
+    message.channel
+      .send(pandemonium.choice(msg))
+      .then(res => log.logSend(res))
+      .catch(e => log.logError(e))
   }
 
   if (/^%/.test(message.content)) {
@@ -137,7 +139,10 @@ client.on("message", message => {
       .channels.find("name", "general")
     if (!channel) return
 
-    channel.send(msg).then( res => log.logSend(res))
+    channel
+      .send(msg)
+      .then(res => log.logSend(res))
+      .catch(e => log.logError(e))
   }
 
   message.content = message.content.substr(0, 300)
@@ -150,14 +155,17 @@ client.on("message", message => {
     msg = message.content.split(/\s+/)
     let user =
       lastUsers.length !== 0 ? pandemonium.choice(lastUsers) : message.author.id
-    message.channel.send("<@" + user + "> " + msg.slice(1).join(" ")).then( res => log.logSend(res))
+    message.channel
+      .send("<@" + user + "> " + msg.slice(1).join(" "))
+      .then(res => log.logSend(res))
+      .catch(e => log.logError(e))
   }
 
   if (/^%top/i.test(message.content)) {
     let userId = message.author.id
 
     if (_.includes(helpWathcher, userId)) {
-      message.react("⏱").catch(e => log.warn(e.message))
+      message.react("⏱").catch(e => log.logError(e))
       return
     }
 
@@ -181,7 +189,10 @@ client.on("message", message => {
 
   if (/^%точно/i.test(message.content))
     message.channel.send(
-      pandemonium.choice(["Определенно точно", "Конечно точно", "Да!"]).then( res => log.logSend(res))
+      pandemonium
+        .choice(["Определенно точно", "Конечно точно", "Да!"])
+        .then(res => log.logSend(res))
+        .catch(e => log.logError(e))
     )
 
   if (
@@ -193,13 +204,17 @@ client.on("message", message => {
     let userId = message.author.id
 
     if (_.includes(helpWathcher, userId)) {
-      message.channel.send(
-        "Я недавно уже помогала, пользуйся прошлой картинкой"
-      ).then( res => log.logSend(res))
+      message.channel
+        .send("Я недавно уже помогала, пользуйся прошлой картинкой")
+        .then(res => log.logSend(res))
+        .catch(e => log.logError(e))
       return
     }
 
-    helper.run(message).then(helpWathcher.push(userId))
+    helper
+      .run(message)
+      .then(helpWathcher.push(userId))
+      .catch(e => log.logError(e))
   }
 
   if (/^%\?\s.+/i.test(message.content)) {
@@ -234,9 +249,12 @@ client.on("message", message => {
 client.on("guildMemberAdd", member => {
   const channel = member.guild.channels.find("name", "welcome")
   if (!channel) return
-  channel.send(
-    `Сейчас придут специально обученные люди и выдадут вам кота, ${member}`
-  ).then( res => log.logSend(res))
+  channel
+    .send(
+      `Сейчас придут специально обученные люди и выдадут вам кота, ${member}`
+    )
+    .then(res => log.logSend(res))
+    .catch(e => log.logError(e))
 })
 
 try {
