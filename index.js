@@ -46,7 +46,7 @@ let artArr = []
 let artIndex = 0
 
 //const list
-const maxUsers = 5
+const maxUsers = 7
 const pauseArt = -300
 const silenceTime = 20
 const masterChannel = "High_Shinkai_Labs"
