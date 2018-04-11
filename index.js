@@ -55,6 +55,9 @@ const masterChannel = "High_Shinkai_Labs"
 const log = require("./lib/log")
 //start
 
+client.on("error", (err) => log.logError(err))
+
+
 client.on("ready", () => {
   log.info("i am ready on " + servername)
   db
