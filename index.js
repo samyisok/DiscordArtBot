@@ -257,8 +257,4 @@ client.on("guildMemberAdd", member => {
     .catch(e => log.logError(e))
 })
 
-try {
-  client.login(codeBot)
-} catch (error) {
-  log.error(error)
-}
+client.login(codeBot).catch(e => log.logError(e))
