@@ -94,6 +94,8 @@ client.on("ready", () => {
 })
 
 client.on("message", message => {
+  if (message.channel.type == 'dm') return
+
   if (withoutMsgCounter > 0 && message.guild.name === servername)
     withoutMsgCounter = 0
   if (
