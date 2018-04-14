@@ -25,6 +25,7 @@ const ref = require("./lib/ref")
 const definer = require("./lib/definer")
 const helper = require("./lib/helper")
 const req = require("./lib/req")
+const waifu = require("./lib/waifu")
 //lib end
 
 //config
@@ -55,8 +56,7 @@ const masterChannel = "High_Shinkai_Labs"
 const log = require("./lib/log")
 //start
 
-client.on("error", (err) => log.logError(err))
-
+client.on("error", err => log.logError(err))
 
 client.on("ready", () => {
   log.info("i am ready on " + servername)
@@ -94,7 +94,7 @@ client.on("ready", () => {
 })
 
 client.on("message", message => {
-  if (message.channel.type == 'dm') return
+  if (message.channel.type == "dm") return
 
   if (withoutMsgCounter > 0 && message.guild.name === servername)
     withoutMsgCounter = 0
@@ -248,6 +248,24 @@ client.on("message", message => {
     /^%report(\s.+)?$/i.test(message.content)
   ) {
     req.add(message, db)
+  }
+
+  if (
+    /^%waifu(\s.+)?$/i.test(message.content) ||
+    /^%тян(\s.+)?$/i.test(message.content)
+  ) {
+    let char = waifu.generate()
+    let charDesc = '```'
+      +`name: ${char.name}\n`
+      +`race: ${char.races.join("-")}\n`
+      +`age: ${char.age}\n`
+      +`height: ${char.height}\n`
+      +`quirks: ${char.quirks.join(", ")}\n`
+      +'```'
+    message.channel
+      .send(charDesc)
+      .then(res => log.logSend(res))
+      .catch(e => log.logError(e))
   }
 })
 
