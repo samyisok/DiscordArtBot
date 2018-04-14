@@ -255,13 +255,14 @@ client.on("message", message => {
     /^%тян(\s.+)?$/i.test(message.content)
   ) {
     let char = waifu.generate()
-    let charDesc = '```'
-      +`name: ${char.name}\n`
-      +`race: ${char.races.join("-")}\n`
-      +`age: ${char.age}\n`
-      +`height: ${char.height}\n`
-      +`quirks: ${char.quirks.join(", ")}\n`
-      +'```'
+    let charDesc =
+      "```" +
+      `name: ${char.name}\n` +
+      `race: ${char.races.join("-")}\n` +
+      `age: ${char.age}\n` +
+      `height: ${char.height}\n` +
+      `quirks: ${char.quirks.join(", ")}\n` +
+      "```"
     message.channel
       .send(charDesc)
       .then(res => log.logSend(res))
