@@ -254,6 +254,16 @@ client.on("message", message => {
     /^%waifu(\s.+)?$/i.test(message.content) ||
     /^%тян(\s.+)?$/i.test(message.content)
   ) {
+
+    let userId = message.author.id
+
+    if (_.includes(helpWathcher, userId)) {
+      message.react("⏱").catch(e => log.logError(e))
+      return
+    }
+
+
+
     let char = waifu.generate()
     let charDesc =
       "```" +
@@ -268,6 +278,8 @@ client.on("message", message => {
       .then(res => log.logSend(res))
       .catch(e => log.logError(e))
   }
+
+  helpWathcher.push(userId)
 })
 
 client.on("guildMemberAdd", member => {
