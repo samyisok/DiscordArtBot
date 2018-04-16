@@ -277,9 +277,10 @@ client.on("message", message => {
       .send(charDesc)
       .then(res => log.logSend(res))
       .catch(e => log.logError(e))
+   
+      helpWathcher.push(userId)
   }
 
-  helpWathcher.push(userId)
 })
 
 client.on("guildMemberAdd", member => {
