@@ -112,7 +112,7 @@ client.on("message", message => {
   }
 
   if (/(^|\ )+бутер[ы]?(\s|$)+/i.test(message.content)) {
-    message.react("🍔").catch(e => log.logError(e))
+    message.react("🥙").catch(e => log.logError(e))
   }
 
   if (/^КУСЬ.?$/i.test(message.content)) {
@@ -193,12 +193,10 @@ client.on("message", message => {
   }
 
   if (/^%точно/i.test(message.content))
-    message.channel.send(
-      pandemonium
-        .choice(["Определенно точно", "Конечно точно", "Да!"])
-        .then(res => log.logSend(res))
-        .catch(e => log.logError(e))
-    )
+    message.channel
+      .send(pandemonium.choice(["Определенно точно", "Конечно точно", "Да!"]))
+      .then(res => log.logSend(res))
+      .catch(e => log.logError(e))
 
   if (
     /^%h[ea][rl]p/i.test(message.content) ||
@@ -254,15 +252,12 @@ client.on("message", message => {
     /^%waifu(\s.+)?$/i.test(message.content) ||
     /^%тян(\s.+)?$/i.test(message.content)
   ) {
-
     let userId = message.author.id
 
     if (_.includes(helpWathcher, userId)) {
       message.react("⏱").catch(e => log.logError(e))
       return
     }
-
-
 
     let char = waifu.generate()
     let charDesc =
@@ -277,10 +272,9 @@ client.on("message", message => {
       .send(charDesc)
       .then(res => log.logSend(res))
       .catch(e => log.logError(e))
-   
-      helpWathcher.push(userId)
-  }
 
+    helpWathcher.push(userId)
+  }
 })
 
 client.on("guildMemberAdd", member => {
@@ -288,7 +282,9 @@ client.on("guildMemberAdd", member => {
   if (!channel) return
   channel
     .send(
-      `Сейчас придут специально обученные люди и выдадут вам кота, ${member}`
+      `Дальше вы не пройдете, пока не покажете рисуночки, ${member}!
+      (Краткие правила: Без политача, Без религиосрачей, Без брани!
+      Make shinkai comfy again!)`
     )
     .then(res => log.logSend(res))
     .catch(e => log.logError(e))
