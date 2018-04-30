@@ -282,9 +282,9 @@ client.on("guildMemberAdd", member => {
   if (!channel) return
   channel
     .send(
-      `Дальше вы не пройдете, пока не покажете рисуночки, ${member}!
-      (Краткие правила: Без политача, Без религиосрачей, Без брани!
-      Make shinkai comfy again!)`
+      `Дальше вы не пройдете, пока не покажете рисуночки, ${member}! >:3
+      (Краткие правила: Без политача, SWF, не спамте картинками
+       будьте няшами и не ругайтесь :3 )`
     )
     .then(res => log.logSend(res))
     .catch(e => log.logError(e))
