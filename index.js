@@ -116,7 +116,7 @@ client.on("message", message => {
   }
 
   if (/^КУСЬ.?$/i.test(message.content)) {
-    msg = ["КУСЬ!", "( ᵒwᵒ)", "кусь", "(︶ω︶)"]
+    msg = ["КУСЬ!", "( ᵒwᵒ)", "кусь", "(︶ω︶)", "Курлык"]
     message.channel
       .send(pandemonium.choice(msg))
       .then(res => log.logSend(res))
@@ -281,11 +281,7 @@ client.on("guildMemberAdd", member => {
   const channel = member.guild.channels.find("name", "welcome")
   if (!channel) return
   channel
-    .send(
-      `Дальше вы не пройдете, пока не покажете рисуночки, ${member}! >:3
-      (Краткие правила: Без политача, SWF, не спамте картинками
-       будьте няшами и не ругайтесь :3 )`
-    )
+    .send(`Дальше вы не пройдете, пока не покажете рисуночки, ${member}! >:3`)
     .then(res => log.logSend(res))
     .catch(e => log.logError(e))
 })
