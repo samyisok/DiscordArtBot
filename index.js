@@ -26,6 +26,7 @@ const definer = require("./lib/definer")
 const helper = require("./lib/helper")
 const req = require("./lib/req")
 const waifu = require("./lib/waifu")
+const mal = require("./lib/mal")
 //lib end
 
 //config
@@ -151,6 +152,24 @@ client.on("message", message => {
   }
 
   message.content = message.content.substr(0, 300)
+
+  if (/(^%anime)|(^%аниме)/i.test(message.content)) {
+    let userId = message.author.id
+
+    if (_.includes(helpWathcher, userId)) {
+      message.react("⏱").catch(e => log.logError(e))
+      return
+    }
+
+    let anime = message.content
+      .split(/\s+/)
+      .slice(1)
+      .join(" ")
+
+    mal.get(message, anime)
+
+    helpWathcher.push(userId)
+  }
 
   if (message.content === "%") {
     common.send(message)
