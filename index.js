@@ -205,7 +205,7 @@ client.on("message", message => {
     let out = []
 
     while (dices[0] > 0) {
-      response.push( pandemonium.random(1, dices[1]) )
+      out.push( pandemonium.random(1, dices[1]) )
       dices[0]--
     }
 
