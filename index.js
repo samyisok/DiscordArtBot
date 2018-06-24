@@ -74,7 +74,7 @@ client.on("ready", () => {
     })
     .write()
 
-  setInterval(function() {
+  setInterval(function () {
     drawpile.checkUsers(client, drawpileUrlTxt, [servername, masterChannel])
 
     helpWathcher = []
@@ -198,6 +198,16 @@ client.on("message", message => {
     helpWathcher.push(userId)
   }
 
+
+  if (/^%[0-9]d[0-9]+$/i.test(message.content)) {
+    let msg = _.replace(message.content, '%', '')
+    let (dices, count) = msg.split(/[dD]/)
+    message.channel
+      .send(dices + ' x ' + count)
+      .then(res => log.logSend(res))
+      .catch(e => log.logError(e))
+  }
+
   if (
     /^%drawpile/i.test(message.content) ||
     /^%вкфцзшду/i.test(message.content) ||
@@ -213,9 +223,9 @@ client.on("message", message => {
 
   if (/^%точно/i.test(message.content))
     message.channel
-      .send(pandemonium.choice(["Определенно точно", "Конечно точно", "Да!"]))
-      .then(res => log.logSend(res))
-      .catch(e => log.logError(e))
+    .send(pandemonium.choice(["Определенно точно", "Конечно точно", "Да!"]))
+    .then(res => log.logSend(res))
+    .catch(e => log.logError(e))
 
   if (
     /^%h[ea][rl]p/i.test(message.content) ||
