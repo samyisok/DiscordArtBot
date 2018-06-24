@@ -201,9 +201,16 @@ client.on("message", message => {
 
   if (/^%[0-9]d[0-9]+$/i.test(message.content)) {
     let msg = _.replace(message.content, '%', '')
-    let (dices, count) = msg.split(/[dD]/)
+    let dices = msg.split(/[dD]/)
+    let out = []
+
+    while (dices[0] > 0) {
+      response.push( pandemonium.random(1, dices[1]) )
+      dices[0]--
+    }
+
     message.channel
-      .send(dices + ' x ' + count)
+      .send('Выпало: ' + out.join(', ') )
       .then(res => log.logSend(res))
       .catch(e => log.logError(e))
   }
