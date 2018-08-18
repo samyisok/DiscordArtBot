@@ -26,7 +26,6 @@ const definer = require("./lib/definer")
 const helper = require("./lib/helper")
 const req = require("./lib/req")
 const waifu = require("./lib/waifu")
-const mal = require("./lib/mal")
 //lib end
 
 //config
@@ -124,7 +123,7 @@ client.on("message", message => {
       .catch(e => log.logError(e))
   }
 
-if (/^%когда/i.test(message.content)) {
+  if (/^%когда/i.test(message.content)) {
     msg = ["Сейчас", "Завтра", "Когда-нибудь", "Никогда", "Вчера"]
     message.channel
       .send(pandemonium.choice(msg) + ' ' + message.content.split(/\s+/).slice(1).join(" "))
@@ -169,12 +168,14 @@ if (/^%когда/i.test(message.content)) {
       return
     }
 
-    let anime = message.content
-      .split(/\s+/)
-      .slice(1)
-      .join(" ")
+    let urlKitsu = 'https://kitsu.io/api/edge/anime?filter%5Bstatus%5D=current&page%5Blimit%5D=20&page%5Boffset%5D=20&sort=-userCount'
 
-    mal.get(message, anime)
+    axios.get(urlKitsu).then(x => {
+      let arr = pandemonium.choice(x.data.data)
+      let msg = arr.attributes.canonicalTitle + "\n"
+        + arr.attributes.coverImage.original + "\n"
+      message.channel.send(msg).then(res => log.logSend(res)).catch(e => log.logError(e))
+    }).catch(e => log.logError(e))
 
     helpWathcher.push(userId)
   }
@@ -213,12 +214,12 @@ if (/^%когда/i.test(message.content)) {
     let out = []
 
     while (dices[0] > 0) {
-      out.push( pandemonium.random(1, dices[1]) )
+      out.push(pandemonium.random(1, dices[1]))
       dices[0]--
     }
 
     message.channel
-      .send('Выпало: ' + out.join(', ') )
+      .send('Выпало: ' + out.join(', '))
       .then(res => log.logSend(res))
       .catch(e => log.logError(e))
   }
@@ -238,9 +239,9 @@ if (/^%когда/i.test(message.content)) {
 
   if (/^%точно/i.test(message.content))
     message.channel
-    .send(pandemonium.choice(["Определенно точно", "Конечно точно", "Да!"]))
-    .then(res => log.logSend(res))
-    .catch(e => log.logError(e))
+      .send(pandemonium.choice(["Определенно точно", "Конечно точно", "Да!"]))
+      .then(res => log.logSend(res))
+      .catch(e => log.logError(e))
 
   if (
     /^%h[ea][rl]p/i.test(message.content) ||
