@@ -173,7 +173,7 @@ client.on("message", message => {
     axios.get(urlKitsu).then(x => {
       let arr = pandemonium.choice(x.data.data)
       let msg = arr.attributes.canonicalTitle + "\n"
-        + arr.attributes.coverImage.original + "\n"
+        + arr.attributes.posterImage.original + "\n"
       message.channel.send(msg).then(res => log.logSend(res)).catch(e => log.logError(e))
     }).catch(e => log.logError(e))
 
