@@ -123,7 +123,7 @@ client.on("message", message => {
       .catch(e => log.logError(e))
   }
 
-if (/^когда\ /i.test(message.content)) {
+if (/^%когда/i.test(message.content)) {
     msg = ["Сейчас", "Завтра", "Когда-нибудь", "Никогда", "Вчера"]
     message.channel
       .send(pandemonium.choice(msg) + ' ' + message.content.split(/\s+/).slice(1).join(" "))
