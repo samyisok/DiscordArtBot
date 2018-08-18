@@ -1,4 +1,3 @@
-const _ = require("lodash")
 const Discord = require("discord.js")
 const client = new Discord.Client()
 const util = require("util")
@@ -120,6 +119,14 @@ client.on("message", message => {
     msg = ["КУСЬ!", "( ᵒwᵒ)", "кусь", "(︶ω︶)", "Курлык"]
     message.channel
       .send(pandemonium.choice(msg))
+      .then(res => log.logSend(res))
+      .catch(e => log.logError(e))
+  }
+
+if (/^когда\ /i.test(message.content)) {
+    msg = ["Сейчас", "Завтра", "Когда-нибудь", "Никогда", "Вчера"]
+    message.channel
+      .send(pandemonium.choice(msg) + ' ' + message.content.split(/\s+/).slice(1).join(" "))
       .then(res => log.logSend(res))
       .catch(e => log.logError(e))
   }
