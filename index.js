@@ -1,3 +1,4 @@
+const _ = require("lodash")
 const Discord = require("discord.js")
 const client = new Discord.Client()
 const util = require("util")
