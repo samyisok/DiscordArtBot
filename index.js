@@ -111,8 +111,8 @@ client.on("message", message => {
     message.react("🍆").catch(e => log.logError(e))
   }
 
-  if (/^бутер/i.test(message.content)) {
-    message.react("🍔").catch(e => log.logError(e))
+  if (/(^|\ )+бутер[ы]?(\s|$)+/i.test(message.content)) {
+    message.react("🍔".catch(e => log.logError(e)))
   }
 
   if (/^КУСЬ.?$/i.test(message.content)) {
