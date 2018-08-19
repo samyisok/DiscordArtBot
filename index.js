@@ -112,7 +112,7 @@ client.on("message", message => {
   }
 
   if (/(^|\ )+бутер[ы]?(\s|$)+/i.test(message.content)) {
-    message.react("🍔".catch(e => log.logError(e)))
+    message.react("🍔").catch(e => log.logError(e)))
   }
 
   if (/^КУСЬ.?$/i.test(message.content)) {
