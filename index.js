@@ -208,7 +208,7 @@ client.on("message", message => {
   }
 
 
-  if (/^%[0-9]d[0-9]+$/i.test(message.content)) {
+  if (/^%[0-9]d[0-9]+\s/i.test(message.content)) {
     let msg = _.replace(message.content, '%', '')
     let dices = msg.split(/[dD]/)
     let out = []
