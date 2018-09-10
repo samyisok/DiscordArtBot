@@ -222,7 +222,7 @@ client.on("message", message => {
     }
 
     message.channel
-      .send('Выпало: ' + out.join(', ') + restMsg.join(' '))
+      .send('Выпало: ' + out.join(', ') + ' ' + restMsg.join(' '))
       .then(res => log.logSend(res))
       .catch(e => log.logError(e))
   }
