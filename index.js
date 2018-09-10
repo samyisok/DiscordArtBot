@@ -208,18 +208,21 @@ client.on("message", message => {
   }
 
 
-  if (/^%[0-9]d[0-9]+\s/i.test(message.content)) {
+  if (/^%[0-9]d[0-9]+/i.test(message.content)) {
     let msg = _.replace(message.content, '%', '')
     let dices = msg.split(/[dD]/)
+    let diceMax
+    let restMsg
+    [diceMax, ...restMsg] = dices[1].split(/\s/)
     let out = []
 
     while (dices[0] > 0) {
-      out.push(pandemonium.random(1, dices[1]))
+      out.push(pandemonium.random(1, diceMax))
       dices[0]--
     }
 
     message.channel
-      .send('Выпало: ' + out.join(', '))
+      .send('Выпало: ' + out.join(', ') + restMsg.join(' '))
       .then(res => log.logSend(res))
       .catch(e => log.logError(e))
   }
