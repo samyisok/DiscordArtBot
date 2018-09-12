@@ -49,7 +49,7 @@ let artIndex = 0
 //const list
 const maxUsers = 7
 const pauseArt = -300
-const silenceTime = 20
+const silenceTime = 25
 const masterChannel = "High_Shinkai_Labs"
 
 //init logger winson
@@ -79,6 +79,7 @@ client.on("ready", () => {
     helpWathcher = []
     withoutMsgCounter++
 
+    log.info("withoutMsgCounter: " + withoutMsgCounter )
     if (withoutMsgCounter > silenceTime) {
       //artStation move
       const channel = client.guilds
