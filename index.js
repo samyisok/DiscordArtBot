@@ -116,24 +116,6 @@ client.on("message", message => {
     message.react("🍔").catch(e => log.logError(e))
   }
 
-  if (/^харро/i.test(message.content)) {
-    let userId = message.author.id
-
-    if (_.includes(helpWathcher, userId)) {
-      message.react("⏱").catch(e => log.logError(e))
-      return
-    }
-
-    msg = ["КУСЬ!", "Harrou!", "Харроу?", "Харро!", "Харо~у", "хАрРоУ~", "harro <3"]
-
-    message.channel
-      .send(pandemonium.choice(msg))
-      .then(res => log.logSend(res))
-      .catch(e => log.logError(e))
-
-    helpWathcher.push(userId)
-  }
-
   if (/^КУСЬ.?$/i.test(message.content)) {
     msg = ["КУСЬ!", "( ᵒwᵒ)", "кусь", "(︶ω︶)", "Курлык"]
     message.channel
