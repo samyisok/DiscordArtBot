@@ -189,8 +189,12 @@ client.on("message", message => {
     msg = message.content.split(/\s+/)
     let user =
       lastUsers.length !== 0 ? pandemonium.choice(lastUsers) : message.author.id
+
+    let userObj = message.guild.member(user)
+    let userName = userObj.nickname
+
     message.channel
-      .send("<@" + user + "> " + msg.slice(1).join(" "))
+      .send( userName + " " + msg.slice(1).join(" "))
       .then(res => log.logSend(res))
       .catch(e => log.logError(e))
   }
