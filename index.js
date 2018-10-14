@@ -185,13 +185,14 @@ client.on("message", message => {
     common.send(message)
   }
 
-  if (/^%кто/i.test(message.content)) {
+  if (/^%кто/i.test(message.content)
+      || /^%who/i.test(message.content)) {
     msg = message.content.split(/\s+/)
-    let user =
+    let userId =
       lastUsers.length !== 0 ? pandemonium.choice(lastUsers) : message.author.id
 
-    let userObj = message.guild.member(user)
-    let userName = userObj.nickname
+    let userObj = client.fetchUser(userId)
+    let userName = userObj.username
 
     message.channel
       .send( userName + " " + msg.slice(1).join(" "))
