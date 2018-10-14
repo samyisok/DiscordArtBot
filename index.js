@@ -193,7 +193,7 @@ client.on("message", message => {
 
     client.fetchUser(userId).then(user =>
       message.channel
-        .send('_' + user.username + "_ " + msg.slice(1).join(" "))
+        .send('**' + user.username + "** " + msg.slice(1).join(" "))
         .then(res => log.logSend(res))
         .catch(e => log.logError(e))
     )
