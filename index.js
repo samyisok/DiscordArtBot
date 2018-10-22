@@ -32,12 +32,15 @@ const waifu = require("./lib/waifu")
 const config = require("config")
 const drawpileConf = config.get("drawpile")
 const servername = config.get("app").guild
+const masterId = config.get("app").master || ''
+const arrayResponses = config.get("app").commonResponses
 const codeBot = config.get("app").code
 const mainChannel = config.get("app").general || 'general'
 const maxFileSize = 8000000
 
 const drawpileUrlTxt = drawpileConf.urlTxt
 const refsPath = "refs/"
+const helpPath = "halp/"
 const urlArtstation = config.get("app").urlArtstation
 
 //vars
@@ -183,7 +186,7 @@ client.on("message", message => {
   }
 
   if (message.content === "%") {
-    common.send(message)
+    common.send(message, arrayResponses )
   }
 
   if (/^%кто/i.test(message.content)
@@ -300,6 +303,86 @@ client.on("message", message => {
     /^%report(\s.+)?$/i.test(message.content)
   ) {
     req.add(message, db)
+  }
+
+  if (/%addhelp(\s.+)?$/i.test(message.content)) {
+    msg = message.content.split(/\s/).slice(1) || ''
+    let attach = message.attachments.first()
+    let urlFile = attach ? attach.url : msg.shift()
+    urlFile = _.trimStart(urlFile, "<")
+    urlFile = _.trimEnd(urlFile, ">")
+    msg = msg.map(x => _.toLower(x))
+    let user = message.author.username
+    //let userId = message.author.id
+    let uuidFile = uuid()
+
+    axios({
+      method: "get",
+      url: urlFile,
+      responseType: "stream"
+    })
+      .then(function (response) {
+        let type = response.headers["content-type"]
+        let fileDesc = ""
+        if (type === "image/jpeg") {
+          fileDesc = "jpg"
+        } else if (type === "image/png") {
+          fileDesc = "png"
+        } else if (type === "video/mp4") {
+          fileDesc = "mp4"
+          msg.push(fileDesc)
+        } else if (type === "image/gif") {
+          fileDesc = "gif"
+          msg.push(fileDesc)
+        } else if (type === "image/webp") {
+          fileDesc = "webp"
+          msg.push(fileDesc)
+        } else {
+          log.warn("wrong file: " + urlFile)
+          message.react("❌").catch(e => log.logError(e))
+          return
+        }
+
+        let sizeFile = response.headers["content-length"]
+        if (
+          sizeFile === undefined ||
+          sizeFile === null ||
+          sizeFile > maxFileSize
+        ) {
+          let warnMsg =
+            "Размер файла слишком большой: " +
+            Math.round(sizeFile / 1000000) +
+            " MB"
+          message.channel
+            .send(warnMsg)
+            .then(res => log.logSend(res))
+            .catch(e => log.logError(e))
+          return
+        }
+
+        let fullfilename = user + '_' + uuidFile + "." + fileDesc
+        let fileData = response.data
+        let chunks = []
+
+        fileData.on("data", chunk => chunks.push(chunk))
+        fileData.on("end", () => {
+          let completeFile = Buffer.concat(chunks)
+
+          fs.writeFile(helpPath + fullfilename, completeFile, err => {
+            if (err) {
+              log.error("err:" + err)
+              log.error("Can not write file: " + urlFile)
+              message.react("😱").catch(e => log.logError(e))
+              return
+            }
+
+            message.react("✅").catch(e => log.logError(e))
+            log.info("Сохранил файл: ", msg, user, helpPath + fullfilename )
+          })
+        })
+      })
+      .catch(e => log.logError(e))
+
   }
 
   if (
