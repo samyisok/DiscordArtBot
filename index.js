@@ -33,6 +33,7 @@ const config = require("config")
 const drawpileConf = config.get("drawpile")
 const servername = config.get("app").guild
 const codeBot = config.get("app").code
+const mainChannel = config.get("app").general || 'general'
 const maxFileSize = 8000000
 
 const drawpileUrlTxt = drawpileConf.urlTxt
@@ -74,7 +75,7 @@ client.on("ready", () => {
     .write()
 
   setInterval(function () {
-    drawpile.checkUsers(client, drawpileUrlTxt, [servername, masterChannel])
+    drawpile.checkUsers(client, drawpileUrlTxt, [servername, masterChannel], mainChannel )
 
     helpWathcher = []
     withoutMsgCounter++
@@ -84,7 +85,7 @@ client.on("ready", () => {
       //artStation move
       const channel = client.guilds
         .find("name", servername)
-        .channels.find("name", "general")
+        .channels.find("name", mainChannel)
       if (!channel) return
       artstation.clearTop() // prepare for fresh data
 
@@ -150,7 +151,7 @@ client.on("message", message => {
 
     const channel = client.guilds
       .find("name", servername)
-      .channels.find("name", "general")
+      .channels.find("name", mainChannel)
     if (!channel) return
 
     channel
