@@ -34,6 +34,7 @@ const drawpileConf = config.get("drawpile")
 const servername = config.get("app").guild
 const masterId = config.get("app").master || ''
 const arrayResponses = config.get("app").commonResponses
+const permitAddHelp = config.get("app").permitAddHelp
 const codeBot = config.get("app").code
 const mainChannel = config.get("app").general || 'general'
 const maxFileSize = 8000000
@@ -305,7 +306,7 @@ client.on("message", message => {
     req.add(message, db)
   }
 
-  if (/%addhelp(\s.+)?$/i.test(message.content)) {
+  if (/%addhelp(\s.+)?$/i.test(message.content) && permitAddHelp ) {
     msg = message.content.split(/\s/).slice(1) || ''
     let attach = message.attachments.first()
     let urlFile = attach ? attach.url : msg.shift()
@@ -313,7 +314,6 @@ client.on("message", message => {
     urlFile = _.trimEnd(urlFile, ">")
     msg = msg.map(x => _.toLower(x))
     let user = message.author.username
-    //let userId = message.author.id
     let uuidFile = uuid()
 
     axios({
