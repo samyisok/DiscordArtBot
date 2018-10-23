@@ -197,10 +197,12 @@ client.on("message", message => {
       lastUsers.length !== 0 ? pandemonium.choice(lastUsers) : message.author.id
 
     client.fetchUser(userId).then(user =>
-      message.channel
-        .send('**' + user.username + "** " + msg.slice(1).join(" "))
-        .then(res => log.logSend(res))
-        .catch(e => log.logError(e))
+      message.guild.fetchMember(user).then(member =>
+        message.channel
+          .send('**' + member.nickname + "** " + msg.slice(1).join(" "))
+          .then(res => log.logSend(res))
+          .catch(e => log.logError(e))
+      )
     )
   }
 
@@ -315,7 +317,7 @@ client.on("message", message => {
     msg = msg.map(x => _.toLower(x))
     let user = message.author.username
     let uuidFile = uuid()
-
+    //TODO refactoring
     axios({
       method: "get",
       url: urlFile,
