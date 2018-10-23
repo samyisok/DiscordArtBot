@@ -199,7 +199,7 @@ client.on("message", message => {
     client.fetchUser(userId).then(user =>
       message.guild.fetchMember(user).then(member =>
         message.channel
-          .send('**' + member.nickname || user.username + "** " + msg.slice(1).join(" "))
+          .send('**' + ( member.nickname || user.username ) + "** " + msg.slice(1).join(" "))
           .then(res => log.logSend(res))
           .catch(e => log.logError(e))
       )
