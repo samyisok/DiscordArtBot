@@ -420,7 +420,7 @@ client.on("message", message => {
 client.on("guildMemberAdd", member => {
   const channel = member.guild.channels.find("name", "welcome")
   let msg = `Дальше вы не пройдете, пока не покажете рисуночки, ${member}! >:3`
-  let postfix = `Papers, please <@${mentionGroup}!> :money:`
+  let postfix = `Papers, please <@${mentionGroup}> :money:`
   if (postfix) msg = msg + '\n' + postfix
   if (!channel) return
   setTimeout(() => {
