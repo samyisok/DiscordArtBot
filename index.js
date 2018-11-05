@@ -35,6 +35,7 @@ const servername = config.get("app").guild
 const masterId = config.get("app").master || ''
 const arrayResponses = config.get("app").commonResponses
 const permitAddHelp = config.get("app").permitAddHelp
+const mentionGroup = config.get("app").mentionGroup
 const codeBot = config.get("app").code
 const mainChannel = config.get("app").general || 'general'
 const maxFileSize = 8000000
@@ -418,11 +419,15 @@ client.on("message", message => {
 
 client.on("guildMemberAdd", member => {
   const channel = member.guild.channels.find("name", "welcome")
+  let msg = `Дальше вы не пройдете, пока не покажете рисуночки, ${member}! >:3`
+  let postfix = `Papers, please <@${mentionGroup}!> :money:`
+  if (postfix) msg = msg + '\n' + postfix
   if (!channel) return
-  channel
-    .send(`Дальше вы не пройдете, пока не покажете рисуночки, ${member}! >:3`)
-    .then(res => log.logSend(res))
-    .catch(e => log.logError(e))
+  setTimeout(
+    channel
+      .send()
+      .then(res => log.logSend(res))
+      .catch(e => log.logError(e)), 1000)
 })
 
 client.login(codeBot).catch(e => log.logError(e))
