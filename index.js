@@ -423,11 +423,11 @@ client.on("guildMemberAdd", member => {
   let postfix = `Papers, please <@${mentionGroup}!> :money:`
   if (postfix) msg = msg + '\n' + postfix
   if (!channel) return
-  setTimeout(
+  setTimeout( () => {
     channel
       .send()
       .then(res => log.logSend(res))
-      .catch(e => log.logError(e)), 1000)
+      .catch(e => log.logError(e))}, 1000)
 })
 
 client.login(codeBot).catch(e => log.logError(e))
