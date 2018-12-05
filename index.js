@@ -175,7 +175,11 @@ client.on("message", message => {
       return
     }
 
-    let urlKitsu = 'https://kitsu.io/api/edge/anime?filter%5Bstatus%5D=current&page%5Blimit%5D=20&page%5Bfset%5D=0&sort=-userCount'
+    let urlKitsu1page = 'https://kitsu.io/api/edge/anime?filter%5Bstatus%5D=current&page%5Blimit%5D=20&page%5Boffset%5D=0&sort=-userCount'
+    let urlKitsu2page = 'https://kitsu.io/api/edge/anime?filter%5Bstatus%5D=current&page%5Blimit%5D=20&page%5Boffset%5D=20&sort=-userCount'
+    let urlKitsu3page = 'https://kitsu.io/api/edge/anime?filter%5Bstatus%5D=current&page%5Blimit%5D=20&page%5Boffset%5D=40&sort=-userCount'
+
+    let urlKitsu = pandemonium.choice([ urlKitsu1page, urlKitsu2page, urlKitsu3page ])
 
     axios.get(urlKitsu).then(x => {
       let arr = pandemonium.choice(x.data.data)
