@@ -168,6 +168,21 @@ client.on("message", message => {
 
   message.content = message.content.substr(0, 300)
 
+  if (/(^%draw)|(^%рисуй)/i.test(message.content)) {
+    let url = 'http://safebooru.org/index.php?page=post&s=random'
+
+    axios.get(url).then(x => {
+      let arr = x.data.split(/\n/).filter(x => x.includes('samples') && x.includes('image'))
+      let stringJson = arr[0].replace('image\ =\ ', '').replace(/\'/g, '"').replace(';', '').trimLeft()
+      let obj = JSON.parse(stringJson)
+      let imgUrl = 'http:' + obj.domain + '/' + obj.base_dir + '/' + obj.dir + '/' + obj.img
+      message.channel
+        .send(imgUrl)
+        .then(res => log.logSend(res))
+        .catch(e => log.logError(e))
+    }).catch(e => log.logError(e))
+  }
+
   if (/(^%anime)|(^%аниме)/i.test(message.content)) {
     let userId = message.author.id
 
