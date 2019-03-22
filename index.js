@@ -34,7 +34,8 @@ const drawpileConf = config.get("drawpile")
 const servername = config.get("app").guild
 const masterId = config.get("app").master || ''
 const arrayResponses = config.get("app").commonResponses
-const permitAddHelp = config.get("app").permitAddHelp
+const permitAddHelp = config.get("app").permitAddHelp || 0
+const permitArtstation = config.get("app").permitArtstation || 0
 const mentionGroup = config.get("app").mentionGroup
 const codeBot = config.get("app").code
 const mainChannel = config.get("app").general || 'general'
@@ -94,7 +95,7 @@ client.on("ready", () => {
       if (!channel) return
       artstation.clearTop() // prepare for fresh data
 
-      artstation.sendTop10(channel)
+      if (permitArtstation){ artstation.sendTop10(channel) }
       withoutMsgCounter = pauseArt
     }
   }, 60000)
