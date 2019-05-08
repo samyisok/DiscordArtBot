@@ -52,6 +52,7 @@ let withoutMsgCounter = -300
 let lastUsers = []
 let artArr = []
 let artIndex = 0
+let startCounter = 0
 
 //const list
 const maxUsers = 7
@@ -80,25 +81,27 @@ client.on("ready", () => {
     })
     .write()
 
-  setInterval(function () {
-    drawpile.checkUsers(client, drawpileUrlTxt, [servername, masterChannel], mainChannel )
+  if (startCounter = 0) {
+    setInterval(function () {
+      drawpile.checkUsers(client, drawpileUrlTxt, [servername, masterChannel], mainChannel )
 
-    helpWathcher = []
-    withoutMsgCounter++
+      helpWathcher = []
+      withoutMsgCounter++
+      startCounter = 1
+      log.info("withoutMsgCounter: " + withoutMsgCounter )
+      if (withoutMsgCounter > silenceTime) {
+        //artStation move
+        const channel = client.guilds
+          .find("name", servername)
+          .channels.find("name", mainChannel)
+        if (!channel) return
+        artstation.clearTop() // prepare for fresh data
 
-    log.info("withoutMsgCounter: " + withoutMsgCounter )
-    if (withoutMsgCounter > silenceTime) {
-      //artStation move
-      const channel = client.guilds
-        .find("name", servername)
-        .channels.find("name", mainChannel)
-      if (!channel) return
-      artstation.clearTop() // prepare for fresh data
-
-      if (permitArtstation){ artstation.sendTop10(channel) }
-      withoutMsgCounter = pauseArt
-    }
-  }, 60000)
+        if (permitArtstation){ artstation.sendTop10(channel) }
+        withoutMsgCounter = pauseArt
+      }
+    }, 60000)
+  }
 })
 
 client.on("message", message => {
