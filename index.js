@@ -81,7 +81,7 @@ client.on("ready", () => {
     })
     .write()
 
-  if (startCounter = 0) {
+  if (startCounter == 0) {
     setInterval(function () {
       drawpile.checkUsers(client, drawpileUrlTxt, [servername, masterChannel], mainChannel )
 
