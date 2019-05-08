@@ -131,6 +131,20 @@ client.on("message", message => {
       .catch(e => log.logError(e))
   }
 
+  if (/^\( \._\.\).?$/i.test(message.content)) {
+    message.channel
+      .send('(._. )')
+      .then(res => log.logSend(res))
+      .catch(e => log.logError(e))
+  }
+
+  if (/^\(\._\. \).?$/i.test(message.content)) {
+    message.channel
+      .send('( ._.)')
+      .then(res => log.logSend(res))
+      .catch(e => log.logError(e))
+  }
+
   if (/^%когда/i.test(message.content)) {
     msg = ["Сейчас", "Завтра", "Когда-нибудь", "Никогда", "Вчера"]
     message.channel
