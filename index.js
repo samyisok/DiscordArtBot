@@ -156,6 +156,29 @@ client.on("message", message => {
       .catch(e => log.logError(e))
   }
 
+  if (
+    /%h[ea][rl]p/i.test(message.content) ||
+    /%рфдз/i.test(message.content) ||
+    /%памаги(те)?/i.test(message.content) ||
+    /%х[ае][рл]п/i.test(message.content)
+  ) {
+    log.info("CMDIN: " + message.content)
+    let userId = message.author.id
+
+    if (_.includes(helpWathcher, userId)) {
+      message.channel
+        .send("Я недавно уже помогала, пользуйся прошлой картинкой")
+        .then(res => log.logSend(res))
+        .catch(e => log.logError(e))
+      return
+    }
+
+    helper
+      .run(message)
+      .then(helpWathcher.push(userId))
+      .catch(e => log.logError(e))
+  }
+
   if (/^%/.test(message.content)) {
     log.info("CMDIN: " + message.content)
   } else {
@@ -295,28 +318,6 @@ client.on("message", message => {
       .send(pandemonium.choice(["Определенно точно", "Конечно точно", "Да!"]))
       .then(res => log.logSend(res))
       .catch(e => log.logError(e))
-
-  if (
-    /^%h[ea][rl]p/i.test(message.content) ||
-    /^%рфдз/i.test(message.content) ||
-    /^%памаги(те)?/i.test(message.content) ||
-    /^%х[ае][рл]п/i.test(message.content)
-  ) {
-    let userId = message.author.id
-
-    if (_.includes(helpWathcher, userId)) {
-      message.channel
-        .send("Я недавно уже помогала, пользуйся прошлой картинкой")
-        .then(res => log.logSend(res))
-        .catch(e => log.logError(e))
-      return
-    }
-
-    helper
-      .run(message)
-      .then(helpWathcher.push(userId))
-      .catch(e => log.logError(e))
-  }
 
   if (/^%\?\s.+/i.test(message.content)) {
     chooser.sendAnswer(message)
