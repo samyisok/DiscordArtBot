@@ -445,7 +445,6 @@ client.on("message", message => {
       .then(res => log.logSend(res))
       .catch(e => log.logError(e))
 
-    helpWathcher.push(userId)
   }
 })
 
