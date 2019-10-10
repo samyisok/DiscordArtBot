@@ -452,7 +452,8 @@ client.on("guildMemberAdd", member => {
   const channel = member.guild.channels.find("name", "welcome")
   let msg = `Дальше вы не пройдете, пока не покажете рисуночки, ${member}! >:3`
   let postfix = `Papers, please <@${mentionGroup}> 🛂`
-  if (postfix) msg = msg + '\n' + postfix
+  let postfix2 = `При получении пропуска вы подтверждаете, что вы старше 18-и лет.`
+  if (postfix) msg = msg + '\n' + postfix + '\n' + postfix2
   if (!channel) return
   setTimeout(() => {
     channel
