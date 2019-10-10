@@ -148,6 +148,14 @@ client.on("message", message => {
       .catch(e => log.logError(e))
   }
 
+  if (/^[fFфФ]$/i.test(message.content)) {
+    let respects = ['🥀 respect paid', '🍆 respect paid' ]
+    message.channel
+      .send(pandemonium.choice(respects))
+      .then(res => log.logSend(res))
+      .catch(e => log.logError(e))
+  }
+
   if (/^%когда/i.test(message.content)) {
     msg = ["Сейчас", "Завтра", "Когда-нибудь", "Никогда", "Вчера"]
     message.channel
