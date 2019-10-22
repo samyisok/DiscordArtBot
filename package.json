@@ -15,7 +15,7 @@
     "discord.js": "^11.3.0",
     "fantasy-names": "^1.1.2",
     "list-filepaths": "^1.6.5",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.13",
     "lowdb": "^1.0.0",
     "pandemonium": "^1.4.1",
     "uuid": "^3.2.1",
