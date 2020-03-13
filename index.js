@@ -479,7 +479,6 @@ client.on("guildMemberAdd", member => {
 })
 
 client.on("guildMemberRemove", member => {
-  log.logError(`${member} совершает успешный побег с сервера!`)
   const channel = member.guild.channels.find("name", mainChannel)
   let msg = `${member} совершает успешный побег с сервера!`
   if (!channel) return log.logError('Нету канала')
