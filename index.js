@@ -148,7 +148,7 @@ client.on("message", message => {
       .catch(e => log.logError(e))
   }
 
-  if (/^[fFфФ]$/i.test(message.content)) {
+  if (/^[фФ]$/i.test(message.content)) {
     let respects = ['🥀 respect paid', '🍆 respect paid' ]
     message.channel
       .send(pandemonium.choice(respects))
