@@ -25,6 +25,7 @@ const ref = require("./lib/ref")
 const definer = require("./lib/definer")
 const helper = require("./lib/helper")
 const req = require("./lib/req")
+const note = require("./lib/note")
 const waifu = require("./lib/waifu")
 //lib end
 
@@ -353,6 +354,12 @@ client.on("message", message => {
     /^%report(\s.+)?$/i.test(message.content)
   ) {
     req.add(message, db)
+  }
+
+  if (
+    /^%note(\s.+)?$/i.test(message.content)
+  ) {
+    note.add(message, db)
   }
 
   if (/%addhelp(\s.+)?$/i.test(message.content) && permitAddHelp ) {
