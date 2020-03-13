@@ -472,15 +472,14 @@ client.on("guildMemberAdd", member => {
 })
 
 client.on("guildMemberRemove", member => {
+  log.logError(`${member} совершает успешный побег с сервера!`)
   const channel = member.guild.channels.find("name", mainChannel)
   let msg = `${member} совершает успешный побег с сервера!`
-  if (!channel) return
-  setTimeout(() => {
-    channel
-      .send(msg)
-      .then(res => log.logSend(res))
-      .catch(e => log.logError(e))
-  }, 30000)
+  if (!channel) return log.logError('Нету канала')
+  channel
+    .send(msg)
+    .then(res => log.logSend(res))
+    .catch(e => log.logError(e))
 })
 
 client.login(codeBot).catch(e => log.logError(e))
