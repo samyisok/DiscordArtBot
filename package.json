@@ -11,7 +11,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bufferutil": "^3.0.3",
-    "config": "^1.29.4",
+    "config": "^3.3.8",
     "discord.js": "^11.3.0",
     "fantasy-names": "^1.1.2",
     "list-filepaths": "^1.6.5",
